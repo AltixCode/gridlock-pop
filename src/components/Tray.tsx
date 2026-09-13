@@ -9,11 +9,8 @@ import Animated, {
   type SharedValue,
 } from 'react-native-reanimated';
 import { PieceShape, shapeHeight, shapeWidth } from './PieceShape';
-import { GRID_SIZE, type Piece } from '../game';
+import { GRID_SIZE, targetCellFromDrag, type Piece } from '../game';
 import { colors, motion, radius, spacing } from '../theme/tokens';
-
-/** How far above the fingertip the dragged piece floats, so the board stays visible. */
-export const DRAG_LIFT = 52;
 
 export interface DragGeometry {
   boardX: SharedValue<number>;
@@ -74,12 +71,15 @@ function TraySlot({
       geometry.dragX.value = event.absoluteX;
       geometry.dragY.value = event.absoluteY;
 
-      const cell = geometry.cellSize.value;
-      if (cell <= 0) return;
-      const left = event.absoluteX - (width * cell) / 2;
-      const top = event.absoluteY - height * cell - DRAG_LIFT;
-      const col = Math.round((left - geometry.boardX.value) / cell);
-      const row = Math.round((top - geometry.boardY.value) / cell);
+      const { row, col } = targetCellFromDrag({
+        pointerX: event.absoluteX,
+        pointerY: event.absoluteY,
+        boardX: geometry.boardX.value,
+        boardY: geometry.boardY.value,
+        cellSize: geometry.cellSize.value,
+        pieceWidth: width,
+        pieceHeight: height,
+      });
 
       // Only cross the bridge to JS when the target cell actually changes.
       if (row !== lastRow.value || col !== lastCol.value) {
