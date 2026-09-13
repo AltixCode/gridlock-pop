@@ -1,0 +1,53 @@
+name: EAS Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: Build profile
+        type: choice
+        default: preview
+        options: [preview, production]
+      platform:
+        description: Target platform
+        type: choice
+        default: all
+        options: [all, ios, android]
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    name: Build ${{ github.event.inputs.profile || 'production' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify before building
+        run: |
+          npm run lint
+          npm run typecheck
+          npm run test:ci
+
+      # Store-bound builds must never be cut from unverified code, so the checks above gate this.
+      - name: EAS build
+        run: |
+          eas build \
+            --profile ${{ github.event.inputs.profile || 'production' }} \
+            --platform ${{ github.event.inputs.platform || 'all' }} \
+            --non-interactive \
+            --no-wait

@@ -13,7 +13,11 @@ describe('shouldShowInterstitial', () => {
   });
 
   it('never shows during the first games of a new install', () => {
-    for (let gamesPlayed = 1; gamesPlayed <= MIN_GAMES_BEFORE_FIRST_INTERSTITIAL; gamesPlayed += 1) {
+    for (
+      let gamesPlayed = 1;
+      gamesPlayed <= MIN_GAMES_BEFORE_FIRST_INTERSTITIAL;
+      gamesPlayed += 1
+    ) {
       expect(shouldShowInterstitial({ ...BASE, gamesPlayed })).toBe(false);
     }
   });
@@ -50,9 +54,9 @@ describe('shouldShowInterstitial', () => {
   });
 
   it('tolerates a clock that jumps backwards', () => {
-    expect(shouldShowInterstitial({ ...BASE, gamesPlayed: 6, lastInterstitialAt: 99_999_999 })).toBe(
-      false,
-    );
+    expect(
+      shouldShowInterstitial({ ...BASE, gamesPlayed: 6, lastInterstitialAt: 99_999_999 }),
+    ).toBe(false);
   });
 
   it('ignores nonsensical game counts', () => {

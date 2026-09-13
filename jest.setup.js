@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
@@ -18,3 +16,11 @@ jest.mock('expo-tracking-transparency', () => ({
   requestTrackingPermissionsAsync: jest.fn(() => Promise.resolve({ status: 'granted' })),
   getTrackingPermissionsAsync: jest.fn(() => Promise.resolve({ status: 'granted' })),
 }));
+
+// RTL v14 renders and cleans up asynchronously; without awaiting cleanup, one test's teardown
+// overlaps the next test's render and produces "overlapping act()" failures.
+const { cleanup } = require('@testing-library/react-native');
+
+afterEach(async () => {
+  await cleanup();
+});

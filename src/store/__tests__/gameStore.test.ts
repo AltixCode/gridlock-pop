@@ -110,9 +110,11 @@ describe('gameStore', () => {
     expect(store().game.score).toBe(300);
     expect(store().game.isGameOver).toBe(false);
     expect(store().game.revivesUsed).toBe(1);
-    expect(store().game.grid.flat().filter((cell) => cell === null).length).toBeGreaterThanOrEqual(
-      GRID_SIZE,
-    );
+    expect(
+      store()
+        .game.grid.flat()
+        .filter((cell) => cell === null).length,
+    ).toBeGreaterThanOrEqual(GRID_SIZE);
   });
 
   it('allows only one revive per run', () => {
@@ -135,8 +137,24 @@ describe('gameStore', () => {
         grid,
         pieces: [
           { id: 'x', shapeId: 'single', colorId: 1, shape: [[true]] },
-          { id: 'y', shapeId: 'square2', colorId: 1, shape: [[true, true], [true, true]] },
-          { id: 'z', shapeId: 'square2', colorId: 2, shape: [[true, true], [true, true]] },
+          {
+            id: 'y',
+            shapeId: 'square2',
+            colorId: 1,
+            shape: [
+              [true, true],
+              [true, true],
+            ],
+          },
+          {
+            id: 'z',
+            shapeId: 'square2',
+            colorId: 2,
+            shape: [
+              [true, true],
+              [true, true],
+            ],
+          },
         ],
       },
     }));

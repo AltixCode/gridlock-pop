@@ -37,6 +37,6 @@ describe('settingsStore', () => {
     await store().hydrate();
     expect(store().sound).toBe(false);
     expect(store().haptics).toBe(true);
-    expect((store() as Record<string, unknown>).bogus).toBeUndefined();
+    expect((store() as unknown as Record<string, unknown>).bogus).toBeUndefined();
   });
 });

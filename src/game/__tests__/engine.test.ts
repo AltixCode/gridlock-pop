@@ -1,10 +1,4 @@
-import {
-  createGame,
-  canApplyMove,
-  applyMove,
-  reviveGame,
-  REVIVE_ROWS_CLEARED,
-} from '../engine';
+import { createGame, canApplyMove, applyMove, reviveGame, REVIVE_ROWS_CLEARED } from '../engine';
 import { createRng } from '../bag';
 import { createEmptyGrid, gridToStrings, GRID_SIZE, countCells } from '../grid';
 import { POINTS_PER_CELL, POINTS_PER_LINE } from '../scoring';

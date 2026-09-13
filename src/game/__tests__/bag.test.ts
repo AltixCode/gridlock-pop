@@ -1,7 +1,6 @@
 import { SHAPES, SHAPE_BY_ID } from '../shapes';
 import { createRng, generatePieceBag, generateFairBag, PIECES_PER_BAG } from '../bag';
-import { createEmptyGrid, countCells, hasAnyValidPlacement } from '../grid';
-import { GRID_SIZE } from '../grid';
+import { GRID_SIZE, countCells, createEmptyGrid, hasAnyValidPlacement } from '../grid';
 
 describe('shape library', () => {
   it('contains at least 15 distinct shapes', () => {
@@ -102,14 +101,14 @@ describe('generatePieceBag', () => {
 
 describe('generateFairBag', () => {
   it('returns a bag that is playable on the given grid', () => {
-    const grid = createEmptyGrid().map((row) => row.map(() => 1));
+    const grid = createEmptyGrid().map((row) => row.map<number | null>(() => 1));
     grid[0][0] = null;
     const bag = generateFairBag(grid, createRng(11));
     expect(bag.some((piece) => hasAnyValidPlacement(grid, piece))).toBe(true);
   });
 
   it('falls back to a normal bag when nothing can possibly fit', () => {
-    const full = createEmptyGrid().map((row) => row.map(() => 1));
+    const full = createEmptyGrid().map((row) => row.map<number | null>(() => 1));
     const bag = generateFairBag(full, createRng(5));
     expect(bag).toHaveLength(PIECES_PER_BAG);
   });

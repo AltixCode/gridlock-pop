@@ -19,7 +19,7 @@ export const REVIVE_ROWS_CLEARED = 3;
 export interface GameState {
   grid: Grid;
   /** Fixed-length tray; a used slot is null until the whole tray refills. */
-  pieces: Array<Piece | null>;
+  pieces: (Piece | null)[];
   score: number;
   combo: number;
   bestCombo: number;

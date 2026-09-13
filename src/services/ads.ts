@@ -15,11 +15,11 @@ import { ADMOB, IS_DEV } from '../config/env';
  * block gameplay, so a missing fill simply means the player continues without an ad.
  */
 
-const interstitialUnitId = IS_DEV || !ADMOB.interstitialUnitId
-  ? TestIds.INTERSTITIAL
-  : ADMOB.interstitialUnitId;
+const interstitialUnitId =
+  IS_DEV || !ADMOB.interstitialUnitId ? TestIds.INTERSTITIAL : ADMOB.interstitialUnitId;
 const rewardedUnitId = IS_DEV || !ADMOB.rewardedUnitId ? TestIds.REWARDED : ADMOB.rewardedUnitId;
-export const bannerUnitId = IS_DEV || !ADMOB.bannerUnitId ? TestIds.ADAPTIVE_BANNER : ADMOB.bannerUnitId;
+export const bannerUnitId =
+  IS_DEV || !ADMOB.bannerUnitId ? TestIds.ADAPTIVE_BANNER : ADMOB.bannerUnitId;
 
 const AD_TIMEOUT_MS = 8000;
 
@@ -60,7 +60,9 @@ export async function initializeAds(): Promise<void> {
 }
 
 function createInterstitial(): InterstitialAd {
-  return InterstitialAd.createForAdRequest(interstitialUnitId, { requestNonPersonalizedAdsOnly: false });
+  return InterstitialAd.createForAdRequest(interstitialUnitId, {
+    requestNonPersonalizedAdsOnly: false,
+  });
 }
 
 function createRewarded(): RewardedAd {
@@ -85,7 +87,10 @@ export function preloadRewarded(): void {
   }
 }
 
-function withTimeout<T>(executor: (resolve: (value: T) => void) => () => void, fallback: T): Promise<T> {
+function withTimeout<T>(
+  executor: (resolve: (value: T) => void) => () => void,
+  fallback: T,
+): Promise<T> {
   return new Promise<T>((resolve) => {
     let settled = false;
     const finish = (value: T) => {

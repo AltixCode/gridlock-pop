@@ -58,7 +58,9 @@ export const usePurchaseStore = create<PurchaseState>((set, get) => ({
       const current = offerings?.current;
       const pkg =
         current?.lifetime ??
-        current?.availablePackages?.find((item) => item.identifier === REMOVE_ADS_OFFERING_PACKAGE) ??
+        current?.availablePackages?.find(
+          (item) => item.identifier === REMOVE_ADS_OFFERING_PACKAGE,
+        ) ??
         current?.availablePackages?.[0] ??
         null;
       set({ packageToBuy: pkg, priceString: pkg?.product?.priceString ?? null });

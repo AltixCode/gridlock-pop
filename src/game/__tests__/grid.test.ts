@@ -242,13 +242,13 @@ describe('findValidPlacements / hasAnyValidPlacement', () => {
   });
 
   it('finds no placement when the grid is completely full', () => {
-    const grid = createEmptyGrid().map((row) => row.map(() => 1));
+    const grid = createEmptyGrid().map((row) => row.map<number | null>(() => 1));
     expect(findValidPlacements(grid, single)).toHaveLength(0);
     expect(hasAnyValidPlacement(grid, single)).toBe(false);
   });
 
   it('finds the single remaining hole', () => {
-    const grid = createEmptyGrid().map((row) => row.map(() => 1));
+    const grid = createEmptyGrid().map((row) => row.map<number | null>(() => 1));
     grid[5][6] = null;
     expect(findValidPlacements(grid, single)).toEqual([{ row: 5, col: 6 }]);
     expect(hasAnyValidPlacement(grid, single)).toBe(true);
@@ -261,19 +261,19 @@ describe('isGameOver', () => {
   });
 
   it('is true when the grid is full', () => {
-    const grid = createEmptyGrid().map((row) => row.map(() => 1));
+    const grid = createEmptyGrid().map((row) => row.map<number | null>(() => 1));
     expect(isGameOver(grid, [single])).toBe(true);
   });
 
   it('is true when the only gaps are too small for every remaining piece', () => {
-    const grid = createEmptyGrid().map((row) => row.map(() => 1));
+    const grid = createEmptyGrid().map((row) => row.map<number | null>(() => 1));
     grid[0][0] = null;
     grid[7][7] = null;
     expect(isGameOver(grid, [square2, lineH5])).toBe(true);
   });
 
   it('is false when at least one piece still fits', () => {
-    const grid = createEmptyGrid().map((row) => row.map(() => 1));
+    const grid = createEmptyGrid().map((row) => row.map<number | null>(() => 1));
     grid[0][0] = null;
     expect(isGameOver(grid, [square2, single])).toBe(false);
   });

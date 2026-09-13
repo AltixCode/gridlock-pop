@@ -109,7 +109,7 @@ export function hasAnyValidPlacement(grid: Grid, piece: Piece): boolean {
   return false;
 }
 
-export function isGameOver(grid: Grid, pieces: Array<Piece | null>): boolean {
+export function isGameOver(grid: Grid, pieces: (Piece | null)[]): boolean {
   const remaining = pieces.filter((piece): piece is Piece => piece !== null);
   if (remaining.length === 0) return true;
   return !remaining.some((piece) => hasAnyValidPlacement(grid, piece));
