@@ -78,3 +78,57 @@ await render(
   1024,
 );
 await render(mark({ size: 256, inset: 0.14 }), 'assets/favicon.png', 48);
+
+/* ---------- Store assets ---------- */
+
+/** Play Store feature graphic (1024x500). Required for the listing; no screenshots inside it. */
+function featureGraphic() {
+  const W = 1024;
+  const H = 500;
+  const cell = 78;
+  const gap = 7;
+  const tile = cell - gap;
+  const r = tile * 0.26;
+  const originX = 96;
+  const originY = H / 2 - cell;
+
+  const tiles = TILES.map(({ x, y, base, dark }) => {
+    const px = originX + x * cell;
+    const py = originY + y * cell;
+    const lift = tile * 0.1;
+    return `
+      <rect x="${px}" y="${py}" width="${tile}" height="${tile}" rx="${r}" fill="${dark}"/>
+      <rect x="${px}" y="${py}" width="${tile}" height="${tile - lift}" rx="${r}" fill="${base}"/>`;
+  }).join('');
+
+  // Faint board lattice behind everything, so the ground reads as a grid rather than flat ink.
+  let lattice = '';
+  for (let x = 0; x <= W; x += cell) {
+    lattice += `<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="#FFFFFF" stroke-opacity="0.03"/>`;
+  }
+  for (let y = 0; y <= H; y += cell) {
+    lattice += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#FFFFFF" stroke-opacity="0.03"/>`;
+  }
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#151D38"/>
+        <stop offset="100%" stop-color="${BG}"/>
+      </linearGradient>
+    </defs>
+    <rect width="${W}" height="${H}" fill="url(#bg)"/>
+    ${lattice}
+    ${tiles}
+    <text x="${originX + 3 * cell + 56}" y="${H / 2 - 12}"
+          font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="82" font-weight="bold"
+          letter-spacing="-2" fill="#F8FAFC">BlockJam</text>
+    <text x="${originX + 3 * cell + 60}" y="${H / 2 + 40}"
+          font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="26" font-weight="500"
+          letter-spacing="0.4" fill="#9FAECA">Drop blocks. Clear lines. Chase the combo.</text>
+  </svg>`;
+}
+
+await mkdir('store-assets', { recursive: true });
+await sharp(Buffer.from(featureGraphic())).png().toFile('store-assets/feature-graphic-1024x500.png');
+console.log('✓ store-assets/feature-graphic-1024x500.png');

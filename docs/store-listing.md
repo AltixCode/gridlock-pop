@@ -63,10 +63,16 @@ Order matters — most stores only show the first two before a scroll.
 
 Capture at the required device resolutions; no device frames on iOS, frames optional on Play.
 
+These are the one store asset that cannot be generated ahead of time — they have to be
+captured from the running app. Take them from the preview build during the device QA pass
+in the release checklist, while you already have both devices in hand.
+
 ## Feature graphic (Android, 1024×500)
 
-Dark `#0B1020` ground, the icon cluster large and left of centre, wordmark BlockJam in
-white to its right, one amber accent tile. No screenshots inside the graphic.
+Already generated: **`store-assets/feature-graphic-1024x500.png`** (regenerate with
+`npm run assets`). Dark gradient ground with a faint board lattice, the tile cluster left
+of centre, wordmark and tagline to its right, ~96px margins on both sides so Play's
+cropping on some surfaces cannot clip the text.
 
 ## Apple — App Privacy answers
 
