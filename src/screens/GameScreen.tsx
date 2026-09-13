@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Board, BOARD_PADDING } from '../components/Board';
 import { AdBanner } from '../components/AdBanner';
 import { GameOverOverlay } from '../components/GameOverOverlay';
+import { PauseOverlay } from '../components/PauseOverlay';
 import { IconButton } from '../components/Buttons';
 import { PieceShape, shapeHeight, shapeWidth } from '../components/PieceShape';
 import { ScoreHeader } from '../components/ScoreHeader';
@@ -45,6 +46,7 @@ export function GameScreen({ onExit, onOpenSettings }: GameScreenProps) {
   const [dragging, setDragging] = useState<Piece | null>(null);
   const [clearing, setClearing] = useState<CompletedLines | null>(null);
   const [watchingAd, setWatchingAd] = useState(false);
+  const [paused, setPaused] = useState(false);
   const endedRef = useRef(false);
 
   // Board sizing: the board is the one element that must never be cramped, so it takes the
@@ -215,7 +217,7 @@ export function GameScreen({ onExit, onOpenSettings }: GameScreenProps) {
     <View style={styles.root}>
       <View style={[styles.content, { paddingTop: insets.top + spacing.sm }]}>
         <View style={styles.topBar}>
-          <IconButton name="back" label="Back to home" onPress={onExit} />
+          <IconButton name="pause" label="Pause" onPress={() => setPaused(true)} />
           <ScoreHeader score={game.score} highScore={highScore} combo={game.combo} />
           <IconButton name="settings" label="Settings" onPress={onOpenSettings} />
         </View>
@@ -255,6 +257,25 @@ export function GameScreen({ onExit, onOpenSettings }: GameScreenProps) {
       <Animated.View pointerEvents="none" style={[styles.dragLayer, dragStyle]}>
         {dragging ? <PieceShape piece={dragging} cellSize={cellSize} /> : null}
       </Animated.View>
+
+      {paused && status === 'playing' ? (
+        <PauseOverlay
+          score={game.score}
+          onResume={() => setPaused(false)}
+          onRestart={() => {
+            setPaused(false);
+            handlePlayAgain();
+          }}
+          onSettings={() => {
+            setPaused(false);
+            onOpenSettings();
+          }}
+          onHome={() => {
+            setPaused(false);
+            onExit();
+          }}
+        />
+      ) : null}
 
       {status === 'gameover' ? (
         <GameOverOverlay

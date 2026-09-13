@@ -4,6 +4,7 @@ import { colors } from '../theme/tokens';
 
 export type IconName =
   | 'play'
+  | 'pause'
   | 'settings'
   | 'close'
   | 'back'
@@ -20,6 +21,7 @@ export type IconName =
 /** Lucide-derived 24x24 outline paths — no emoji stands in for an icon anywhere in the app. */
 const PATHS: Record<IconName, React.ReactNode> = {
   play: <Path d="M7 4.5v15l13-7.5z" />,
+  pause: <Path d="M9 4.5h3v15H9zM15 4.5h3v15h-3z" />,
   settings: (
     <>
       <Circle cx={12} cy={12} r={3} />
