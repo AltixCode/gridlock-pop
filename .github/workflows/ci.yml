@@ -16,9 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22.x
           cache: npm
@@ -35,9 +35,11 @@ jobs:
       - name: Unit tests
         run: npm run test:ci
 
+      # Informational only — a full artifact-storage quota must not fail a green test run.
       - name: Upload coverage
         if: always()
-        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        uses: actions/upload-artifact@v5
         with:
           name: coverage
           path: coverage/
