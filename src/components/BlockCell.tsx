@@ -72,12 +72,12 @@ const styles = StyleSheet.create({
     borderColor: colors.cellEmptyEdge,
   },
   previewValid: {
-    backgroundColor: 'rgba(251,191,36,0.30)',
-    borderColor: 'rgba(251,191,36,0.70)',
+    backgroundColor: colors.previewValidFill,
+    borderColor: colors.previewValidEdge,
   },
   previewInvalid: {
-    backgroundColor: 'rgba(248,113,113,0.20)',
-    borderColor: 'rgba(248,113,113,0.55)',
+    backgroundColor: colors.previewInvalidFill,
+    borderColor: colors.previewInvalidEdge,
   },
   filled: { flex: 1 },
   face: { position: 'absolute', top: 0, left: 0, right: 0 },

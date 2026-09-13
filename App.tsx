@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ReduceMotion, ReducedMotionConfig } from 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ErrorBoundary } from './src/components/ErrorBoundary';
 import { GameScreen } from './src/screens/GameScreen';
@@ -43,6 +44,9 @@ export default function App() {
     <GestureHandlerRootView style={styles.root}>
       <SafeAreaProvider>
         <StatusBar style="light" />
+        {/* Honour the OS "reduce motion" setting: entrances and the clear flash stop animating
+            for players who have asked the system for less movement. */}
+        <ReducedMotionConfig mode={ReduceMotion.System} />
         <ErrorBoundary
           onReset={() => {
             // Drop the broken run and put the player back somewhere that definitely works.

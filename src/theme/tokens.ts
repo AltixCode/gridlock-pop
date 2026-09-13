@@ -26,7 +26,33 @@ export const colors = {
   danger: '#F87171',
 
   overlay: 'rgba(6,10,22,0.82)',
+
+  /** Drag preview on an empty cell. */
+  previewValidFill: 'rgba(251,191,36,0.30)',
+  previewValidEdge: 'rgba(251,191,36,0.70)',
+  previewInvalidFill: 'rgba(248,113,113,0.20)',
+  previewInvalidEdge: 'rgba(248,113,113,0.55)',
+
+  /** Combo badge. */
+  comboFill: 'rgba(251,191,36,0.16)',
+  comboEdge: 'rgba(251,191,36,0.50)',
+
+  /** The flash swept over a cleared row or column. */
+  clearBurst: 'rgba(255,255,255,0.85)',
+
+  /** Android press ripples. */
+  ripple: 'rgba(255,255,255,0.12)',
+  rippleSubtle: 'rgba(255,255,255,0.08)',
+
+  /** Top of the home screen gradient. */
+  gradientTop: '#141C36',
 } as const;
+
+/**
+ * Caps how far the OS font-size setting may stretch text that sits in a fixed-height slot.
+ * Body copy is left to scale freely; only these would otherwise break the layout outright.
+ */
+export const MAX_DISPLAY_FONT_SCALE = 1.3;
 
 /** Piece colours — distinguishable for the common colour-vision deficiencies, all AA on the board well. */
 export const pieceColors = [

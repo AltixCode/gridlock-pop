@@ -8,7 +8,15 @@ import { Icon } from '../components/Icon';
 import { AdBanner } from '../components/AdBanner';
 import { useGameStore } from '../store/gameStore';
 import { usePurchaseStore } from '../store/purchaseStore';
-import { colors, pieceColors, radius, shadow, spacing, type } from '../theme/tokens';
+import {
+  MAX_DISPLAY_FONT_SCALE,
+  colors,
+  pieceColors,
+  radius,
+  shadow,
+  spacing,
+  type,
+} from '../theme/tokens';
 
 interface HomeScreenProps {
   onPlay: () => void;
@@ -80,7 +88,7 @@ export function HomeScreen({ onPlay, onOpenSettings, onRemoveAds }: HomeScreenPr
   return (
     <View style={styles.root}>
       <LinearGradient
-        colors={['#141C36', colors.background]}
+        colors={[colors.gradientTop, colors.background]}
         style={StyleSheet.absoluteFill}
         pointerEvents="none"
       />
@@ -93,7 +101,9 @@ export function HomeScreen({ onPlay, onOpenSettings, onRemoveAds }: HomeScreenPr
 
         <Animated.View entering={FadeInUp.duration(400)} style={styles.hero}>
           <Hero />
-          <Text style={[type.display, styles.title]}>BlockJam</Text>
+          <Text style={[type.display, styles.title]} maxFontSizeMultiplier={MAX_DISPLAY_FONT_SCALE}>
+            BlockJam
+          </Text>
           <Text style={[type.caption, styles.subtitle]}>
             Drop blocks. Clear lines. Chase the combo.
           </Text>
@@ -103,7 +113,12 @@ export function HomeScreen({ onPlay, onOpenSettings, onRemoveAds }: HomeScreenPr
           <View style={styles.bestRow}>
             <Icon name="trophy" size={18} color={colors.accent} />
             <Text style={type.label}>BEST</Text>
-            <Text style={[type.title, styles.bestValue]}>{highScore.toLocaleString()}</Text>
+            <Text
+              style={[type.title, styles.bestValue]}
+              maxFontSizeMultiplier={MAX_DISPLAY_FONT_SCALE}
+            >
+              {highScore.toLocaleString()}
+            </Text>
           </View>
 
           <Button label="Play" icon="play" onPress={onPlay} accessibilityHint="Starts a new game" />

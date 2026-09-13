@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row' },
   burst: {
     position: 'absolute',
-    backgroundColor: 'rgba(255,255,255,0.85)',
+    backgroundColor: colors.clearBurst,
     borderRadius: radius.md,
   },
 });

@@ -119,3 +119,16 @@ of the Families programme and its extra ad restrictions), **Content rating quest
 - Support: `support@altixcode.com`
 - Privacy policy and Terms: publish `docs/legal/privacy.html` and `docs/legal/terms.html`,
   then set `EXPO_PUBLIC_PRIVACY_POLICY_URL` and `EXPO_PUBLIC_TERMS_URL`.
+
+## Accessibility summary (for the store questionnaires)
+
+| Area          | Status                                                                                      |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| Touch targets | Every control ≥48pt (buttons 56pt), icon buttons carry `hitSlop`                            |
+| Labels        | Every interactive element has an `accessibilityLabel`; no icon-only control is unlabelled   |
+| Screen reader | Tray pieces expose a "Place piece" action that places at the first legal position           |
+| Contrast      | All text pairings clear WCAG AA (4.5:1) against their own surface                           |
+| Dynamic Type  | Text scales with the OS setting; only fixed-height numerals are capped (1.3×)               |
+| Reduce Motion | Honoured app-wide via Reanimated's `ReducedMotionConfig`                                    |
+| Colour alone  | Piece identity never depends on hue alone — placement validity also changes the cell border |
+| Safe areas    | Every screen lays out from `useSafeAreaInsets()`                                            |

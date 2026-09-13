@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { Button } from './Buttons';
 import { Icon } from './Icon';
-import { colors, radius, shadow, spacing, type } from '../theme/tokens';
+import { MAX_DISPLAY_FONT_SCALE, colors, radius, shadow, spacing, type } from '../theme/tokens';
 
 interface GameOverOverlayProps {
   score: number;
@@ -42,13 +42,19 @@ export function GameOverOverlay({
         {isNewHighScore ? (
           <View style={styles.badge}>
             <Icon name="sparkles" size={16} color={colors.onAccent} filled />
-            <Text style={styles.badgeText}>NEW BEST</Text>
+            <Text style={styles.badgeText} maxFontSizeMultiplier={MAX_DISPLAY_FONT_SCALE}>
+              NEW BEST
+            </Text>
           </View>
         ) : (
           <Text style={[type.label, styles.kicker]}>GAME OVER</Text>
         )}
 
-        <Text style={[type.display, styles.score]} accessibilityLabel={`You scored ${score}`}>
+        <Text
+          style={[type.display, styles.score]}
+          maxFontSizeMultiplier={MAX_DISPLAY_FONT_SCALE}
+          accessibilityLabel={`You scored ${score}`}
+        >
           {score.toLocaleString()}
         </Text>
 

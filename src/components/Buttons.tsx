@@ -64,7 +64,7 @@ export function Button({
         tapFeedback();
         onPress();
       }}
-      android_ripple={{ color: 'rgba(255,255,255,0.12)', borderless: false }}
+      android_ripple={{ color: colors.ripple, borderless: false }}
       style={[
         styles.button,
         variant === 'primary' && styles.primary,

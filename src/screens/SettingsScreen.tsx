@@ -175,7 +175,7 @@ function LinkRow({ label, onPress }: { label: string; onPress: () => void }) {
       accessibilityLabel={label}
       onPress={onPress}
       style={styles.row}
-      android_ripple={{ color: 'rgba(255,255,255,0.08)' }}
+      android_ripple={{ color: colors.rippleSubtle }}
     >
       <Text style={[type.body, styles.rowLabel]}>{label}</Text>
       <Icon name="chevron-right" size={18} color={colors.textFaint} />

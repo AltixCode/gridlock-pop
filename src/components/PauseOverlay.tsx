@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { Button } from './Buttons';
-import { colors, radius, shadow, spacing, type } from '../theme/tokens';
+import { MAX_DISPLAY_FONT_SCALE, colors, radius, shadow, spacing, type } from '../theme/tokens';
 
 interface PauseOverlayProps {
   score: number;
@@ -43,7 +43,11 @@ export function PauseOverlay({
         style={styles.card}
       >
         <Text style={[type.label, styles.kicker]}>PAUSED</Text>
-        <Text style={[type.score, styles.score]} accessibilityLabel={`Current score ${score}`}>
+        <Text
+          style={[type.score, styles.score]}
+          maxFontSizeMultiplier={MAX_DISPLAY_FONT_SCALE}
+          accessibilityLabel={`Current score ${score}`}
+        >
           {score.toLocaleString()}
         </Text>
 
