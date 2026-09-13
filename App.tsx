@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ErrorBoundary } from './src/components/ErrorBoundary';
 import { GameScreen } from './src/screens/GameScreen';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { SettingsScreen } from './src/screens/SettingsScreen';
@@ -42,21 +43,29 @@ export default function App() {
     <GestureHandlerRootView style={styles.root}>
       <SafeAreaProvider>
         <StatusBar style="light" />
-        <View style={styles.root}>
-          {route === 'home' ? (
-            <HomeScreen
-              onPlay={startGame}
-              onOpenSettings={openSettings}
-              onRemoveAds={openSettings}
-            />
-          ) : null}
+        <ErrorBoundary
+          onReset={() => {
+            // Drop the broken run and put the player back somewhere that definitely works.
+            useGameStore.getState().abandonRun();
+            setRoute('home');
+          }}
+        >
+          <View style={styles.root}>
+            {route === 'home' ? (
+              <HomeScreen
+                onPlay={startGame}
+                onOpenSettings={openSettings}
+                onRemoveAds={openSettings}
+              />
+            ) : null}
 
-          {route === 'game' ? (
-            <GameScreen onExit={() => setRoute('home')} onOpenSettings={openSettings} />
-          ) : null}
+            {route === 'game' ? (
+              <GameScreen onExit={() => setRoute('home')} onOpenSettings={openSettings} />
+            ) : null}
 
-          {route === 'settings' ? <SettingsScreen onClose={() => setRoute(returnTo)} /> : null}
-        </View>
+            {route === 'settings' ? <SettingsScreen onClose={() => setRoute(returnTo)} /> : null}
+          </View>
+        </ErrorBoundary>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

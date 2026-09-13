@@ -22,6 +22,16 @@ describe('settingsStore', () => {
     expect(JSON.parse(raw!)).toMatchObject({ sound: false });
   });
 
+  it('toggles and persists haptics alongside sound', async () => {
+    await store().setSound(false);
+    await store().setHaptics(false);
+
+    expect(store().haptics).toBe(false);
+    const raw = await AsyncStorage.getItem(STORAGE_KEYS.settings);
+    // Writing one setting must not drop the other.
+    expect(JSON.parse(raw!)).toEqual({ sound: false, haptics: false });
+  });
+
   it('hydrates persisted settings', async () => {
     await AsyncStorage.setItem(
       STORAGE_KEYS.settings,

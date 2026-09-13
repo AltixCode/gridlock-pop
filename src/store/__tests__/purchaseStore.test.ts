@@ -90,6 +90,26 @@ describe('purchaseStore', () => {
     await expect(store().restore()).resolves.toBe(false);
   });
 
+  it('initialises entitlements and the offering together', async () => {
+    (Purchases.getCustomerInfo as jest.Mock).mockResolvedValueOnce(activeInfo);
+    (Purchases.getOfferings as jest.Mock).mockResolvedValueOnce(offering);
+
+    await store().initialize();
+
+    expect(store().adsRemoved).toBe(true);
+    expect(store().priceString).toBe('$3.99');
+  });
+
+  it('keeps a known entitlement when the network is unavailable', async () => {
+    (Purchases.getCustomerInfo as jest.Mock).mockResolvedValueOnce(activeInfo);
+    await store().refreshEntitlements();
+
+    // Going offline must not lock a paying player back out of what they bought.
+    (Purchases.getCustomerInfo as jest.Mock).mockRejectedValueOnce(new Error('offline'));
+    await store().refreshEntitlements();
+    expect(store().adsRemoved).toBe(true);
+  });
+
   it('never leaves the purchase spinner stuck', async () => {
     (Purchases.restorePurchases as jest.Mock).mockRejectedValueOnce(new Error('nope'));
     await store().restore();

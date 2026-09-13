@@ -126,6 +126,52 @@ describe('gameStore', () => {
     expect(store().canRevive()).toBe(false);
   });
 
+  it('abandons a run without losing the record or the game count', async () => {
+    store().startGame(1);
+    useGameStore.setState((s) => ({ game: { ...s.game, score: 900 } }));
+    await store().endRun();
+
+    store().startGame(2);
+    useGameStore.setState((s) => ({ game: { ...s.game, score: 40 } }));
+    store().abandonRun();
+
+    expect(store().status).toBe('idle');
+    expect(store().game.score).toBe(0);
+    expect(store().game.isGameOver).toBe(false);
+    expect(store().highScore).toBe(900);
+    expect(store().gamesPlayed).toBe(1);
+  });
+
+  it('records and persists when an interstitial was shown', async () => {
+    store().startGame(1);
+    await store().endRun();
+
+    const before = Date.now();
+    await store().markInterstitialShown();
+
+    expect(store().lastInterstitialAt).toBeGreaterThanOrEqual(before);
+    const raw = await AsyncStorage.getItem(STORAGE_KEYS.progress);
+    expect(JSON.parse(raw!).lastInterstitialAt).toBe(store().lastInterstitialAt);
+    // The record and game count must survive the write.
+    expect(JSON.parse(raw!).gamesPlayed).toBe(1);
+  });
+
+  it('clears the last move outcome once the animation has played', () => {
+    store().startGame(1);
+    const placement = store().findFirstPlacement(0)!;
+    store().place(0, placement.row, placement.col);
+    expect(store().lastOutcome).not.toBeNull();
+
+    store().clearLastOutcome();
+    expect(store().lastOutcome).toBeNull();
+  });
+
+  it('has no placement to offer for an empty tray slot', () => {
+    store().startGame(1);
+    useGameStore.setState({ game: { ...store().game, pieces: [null, null, null] } });
+    expect(store().findFirstPlacement(0)).toBeNull();
+  });
+
   it('flips to gameover when the board dies', () => {
     store().startGame(1);
     const grid = createEmptyGrid().map((row) => row.map<number | null>(() => 1));

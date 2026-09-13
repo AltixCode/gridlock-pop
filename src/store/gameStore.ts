@@ -38,6 +38,7 @@ export interface GameStore {
   canPlace: (slot: number, row: number, col: number) => boolean;
   findFirstPlacement: (slot: number) => Placement | null;
   canRevive: () => boolean;
+  abandonRun: () => void;
   revive: () => void;
   endRun: () => Promise<void>;
   markInterstitialShown: () => Promise<void>;
@@ -119,6 +120,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   canRevive: () => get().game.revivesUsed < MAX_REVIVES_PER_RUN,
+
+  /**
+   * Throws the current run away and returns to an idle state, keeping the record and the game
+   * count. Used when recovering from a crash — the run is expendable, the player's best is not.
+   */
+  abandonRun: () => {
+    rng = createRng(Date.now());
+    set({
+      game: createGame(rng),
+      status: 'idle',
+      lastOutcome: null,
+      isNewHighScore: false,
+    });
+  },
 
   revive: () => {
     const { game } = get();
