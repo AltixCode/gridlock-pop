@@ -38,7 +38,8 @@ export const REVENUECAT_API_KEY = pick(
 );
 
 export const PRIVACY_POLICY_URL =
-  process.env.EXPO_PUBLIC_PRIVACY_POLICY_URL ?? 'https://atasmohammadi.github.io/blockjam/privacy';
+  process.env.EXPO_PUBLIC_PRIVACY_POLICY_URL ??
+  'https://atasmohammadi.github.io/blockjam/legal/privacy.html';
 export const TERMS_URL =
-  process.env.EXPO_PUBLIC_TERMS_URL ?? 'https://atasmohammadi.github.io/blockjam/terms';
+  process.env.EXPO_PUBLIC_TERMS_URL ?? 'https://atasmohammadi.github.io/blockjam/legal/terms.html';
 export const SUPPORT_EMAIL = process.env.EXPO_PUBLIC_SUPPORT_EMAIL ?? 'support@altixcode.com';
