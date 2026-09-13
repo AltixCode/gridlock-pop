@@ -21,7 +21,11 @@ Add `EXPO_TOKEN` (Expo → Access Tokens) to the GitHub repo secrets so CI can b
 2. Create three ad units per platform: **Banner (adaptive)**, **Interstitial**, **Rewarded**.
 3. Put the app ids and unit ids into EAS environment variables (below).
 4. Set the app's content rating to **G** in AdMob so the ads match the store age rating.
-5. Register your own devices as test devices before ever running a live build —
+5. **Privacy & messaging → create a GDPR message and a US state regulations message**, and
+   publish them. The app runs the UMP flow on launch, but the SDK can only present a message
+   that exists in the console; without one, EEA/UK users generate no consent and — because the
+   app fails closed — see no ads at all.
+6. Register your own devices as test devices before ever running a live build —
    clicking your own live ads gets the account banned.
 
 ### RevenueCat (`app.revenuecat.com`)
@@ -84,6 +88,8 @@ npm run doctor                 # expo-doctor, 21 checks
 3. Install the preview build on a **low-end Android device** and one iPhone. Confirm:
    - 60fps while dragging on the cheap device
    - line clears feel right, no dropped gestures
+   - the consent form appears in the EEA (test with AdsConsentDebugGeography.EEA) and
+     "Ad privacy settings" then shows up in Settings → About
    - the ATT prompt appears once on iOS, and ads still fill when denied
    - rewarded "Continue" actually grants the revive
    - interstitial appears no more than once per three game-overs

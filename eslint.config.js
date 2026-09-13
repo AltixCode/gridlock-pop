@@ -46,5 +46,7 @@ module.exports = [
         afterAll: 'readonly',
       },
     },
+    // Specs deliberately use require() to re-resolve a module after jest.resetModules().
+    rules: { '@typescript-eslint/no-require-imports': 'off' },
   },
 ];

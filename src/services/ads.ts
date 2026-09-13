@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import mobileAds, {
   AdEventType,
+  AdsConsent,
   InterstitialAd,
   MaxAdContentRating,
   RewardedAd,
@@ -9,6 +10,8 @@ import mobileAds, {
 } from 'react-native-google-mobile-ads';
 import { requestTrackingPermissionsAsync } from 'expo-tracking-transparency';
 import { ADMOB, IS_DEV } from '../config/env';
+import { summariseConsent, type ConsentInfoLike, type ConsentSummary } from './consentPolicy';
+import { useAdsStore } from '../store/adsStore';
 
 /**
  * Thin AdMob wrapper. Every entry point resolves rather than throws: an ad failure must never
@@ -26,6 +29,42 @@ const AD_TIMEOUT_MS = 8000;
 let initialized = false;
 let interstitial: InterstitialAd | null = null;
 let rewarded: RewardedAd | null = null;
+let consent: ConsentSummary = { canServeAds: false, offerPrivacyOptions: false };
+
+function applyConsent(next: ConsentSummary): void {
+  consent = next;
+  useAdsStore.getState().setConsent(next);
+}
+
+export function getConsentSummary(): ConsentSummary {
+  return consent;
+}
+
+/**
+ * Runs Google's User Messaging Platform flow: fetches the consent state and, where the user's
+ * region requires it, presents the consent form. Must complete before the Mobile Ads SDK is
+ * initialised, or the first ad request can go out without consent.
+ */
+async function gatherConsent(): Promise<ConsentSummary> {
+  try {
+    const info = (await AdsConsent.gatherConsent()) as unknown as ConsentInfoLike;
+    return summariseConsent(info);
+  } catch {
+    // Fail closed: no consent information means no ads, and the game plays on regardless.
+    return { canServeAds: false, offerPrivacyOptions: false };
+  }
+}
+
+/** Reopens the consent form. Google requires this entry point wherever it reports REQUIRED. */
+export async function showPrivacyOptionsForm(): Promise<boolean> {
+  try {
+    const info = (await AdsConsent.showPrivacyOptionsForm()) as unknown as ConsentInfoLike;
+    applyConsent(summariseConsent(info));
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 /**
  * iOS requires the ATT prompt before AdMob can request personalised ads. It must run after the
@@ -45,7 +84,13 @@ export async function initializeAds(): Promise<void> {
   if (initialized) return;
   initialized = true;
   try {
+    // Order matters: UMP consent first, then ATT, then the SDK. Initialising the Mobile Ads
+    // SDK before consent is gathered can put an ad request on the wire without it.
+    applyConsent(await gatherConsent());
     await requestTrackingIfNeeded();
+
+    if (!consent.canServeAds) return;
+
     await mobileAds().setRequestConfiguration({
       maxAdContentRating: MaxAdContentRating.G,
       tagForChildDirectedTreatment: false,
@@ -171,4 +216,5 @@ export function resetAdsForTests(): void {
   initialized = false;
   interstitial = null;
   rewarded = null;
+  applyConsent({ canServeAds: false, offerPrivacyOptions: false });
 }

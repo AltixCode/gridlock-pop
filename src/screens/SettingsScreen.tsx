@@ -14,6 +14,8 @@ import { Button, IconButton } from '../components/Buttons';
 import { Icon, type IconName } from '../components/Icon';
 import { useSettingsStore } from '../store/settingsStore';
 import { usePurchaseStore } from '../store/purchaseStore';
+import { useAdsStore } from '../store/adsStore';
+import { showPrivacyOptionsForm } from '../services/ads';
 import { PRIVACY_POLICY_URL, SUPPORT_EMAIL, TERMS_URL } from '../config/env';
 import { colors, radius, spacing, type } from '../theme/tokens';
 
@@ -26,6 +28,7 @@ export function SettingsScreen({ onClose }: SettingsScreenProps) {
   const { sound, haptics, setSound, setHaptics } = useSettingsStore();
   const { adsRemoved, priceString, isBusy, purchaseRemoveAds, restore } = usePurchaseStore();
   const [busyAction, setBusyAction] = useState<'purchase' | 'restore' | null>(null);
+  const offerPrivacyOptions = useAdsStore((state) => state.consent.offerPrivacyOptions);
 
   const handlePurchase = useCallback(async () => {
     setBusyAction('purchase');
@@ -108,6 +111,16 @@ export function SettingsScreen({ onClose }: SettingsScreenProps) {
         </Section>
 
         <Section title="ABOUT">
+          {/* Google requires an entry point back into the consent form wherever the UMP SDK
+              reports one is needed — typically the EEA, the UK and regulated US states. */}
+          {offerPrivacyOptions ? (
+            <LinkRow
+              label="Ad privacy settings"
+              onPress={() => {
+                void showPrivacyOptionsForm();
+              }}
+            />
+          ) : null}
           <LinkRow label="Privacy policy" onPress={() => Linking.openURL(PRIVACY_POLICY_URL)} />
           <LinkRow label="Terms of use" onPress={() => Linking.openURL(TERMS_URL)} />
           <LinkRow

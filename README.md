@@ -81,6 +81,20 @@ the upgrade is supposed to remove.
 Pacing lives in `src/services/adPolicy.ts` and is unit tested — change the constants there,
 not at the call sites.
 
+### Consent (GDPR / UMP)
+
+`initializeAds()` runs Google's User Messaging Platform flow _first_, then the iOS ATT
+prompt, and only then initialises the Mobile Ads SDK — and only if UMP says the app may
+request ads. The rules live in `src/services/consentPolicy.ts` and fail closed: if the
+consent SDK is unreachable, the app serves no ads at all rather than risking an ad request
+without consent, which is a common cause of AdMob account suspension. Where UMP reports
+that a privacy entry point is required, Settings → About grows an "Ad privacy settings"
+row that reopens the form.
+
+You still have to build the consent message itself in the AdMob console
+(Privacy & messaging → GDPR + US state regulations) — the SDK only presents what is
+configured there.
+
 ## Configuration
 
 No keys are committed. Everything comes from `EXPO_PUBLIC_*` environment variables

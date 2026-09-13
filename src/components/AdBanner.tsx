@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 import { bannerUnitId } from '../services/ads';
 import { usePurchaseStore } from '../store/purchaseStore';
+import { useAdsStore } from '../store/adsStore';
 import { colors } from '../theme/tokens';
 
 export const BANNER_HEIGHT = 60;
@@ -13,9 +14,12 @@ export const BANNER_HEIGHT = 60;
  */
 export function AdBanner() {
   const adsRemoved = usePurchaseStore((state) => state.adsRemoved);
+  const canServeAds = useAdsStore((state) => state.consent.canServeAds);
   const [failed, setFailed] = useState(false);
 
-  if (adsRemoved) return null;
+  // No slot at all until consent permits an ad request — an empty reserved strip would just be
+  // dead space for a player who declined.
+  if (adsRemoved || !canServeAds) return null;
 
   return (
     <View style={styles.slot} accessibilityLabel="Advertisement">
