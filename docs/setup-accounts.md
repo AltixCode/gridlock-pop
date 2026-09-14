@@ -6,17 +6,17 @@ step I can take over — the "I continue with" line says exactly what.
 
 Values you will need throughout:
 
-| Thing                  | Value                                                        |
-| ---------------------- | ------------------------------------------------------------ |
-| App name               | Cubex                                                        |
-| Bundle ID / package    | `com.altixcode.cubex` (already registered in Apple's portal) |
-| iOS IAP product id     | `com.altixcode.cubex.removeads`                              |
-| Android IAP product id | `remove_ads`                                                 |
-| Entitlement            | `remove_ads`                                                 |
-| Price                  | US$3.99, one-time, non-consumable                            |
-| RevenueCat project     | Cubex — `proj62d4d4fd`                                       |
-| RevenueCat iOS app     | `app7417aeca64`                                              |
-| RevenueCat Android app | `appad56489755`                                              |
+| Thing                  | Value                                                                                                      |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------- |
+| App name               | Cubex                                                                                                      |
+| Bundle ID / package    | `com.altixcode.cubex` (already registered in Apple's portal)                                               |
+| iOS IAP product id     | `com.altixcode.cubex.removeads`                                                                            |
+| Android IAP product id | `remove_ads`                                                                                               |
+| Entitlement            | `remove_ads`                                                                                               |
+| Price                  | US$3.99, one-time, non-consumable                                                                          |
+| RevenueCat project     | `proj62d4d4fd` (still labelled "BlockJam" in the dashboard — cosmetic; `rc` has no project-rename command) |
+| RevenueCat iOS app     | `appdcf8a0f5c1`                                                                                            |
+| RevenueCat Android app | `app33f836eae0`                                                                                            |
 
 ---
 
@@ -133,7 +133,7 @@ Connect API key is configured. Two things need you.
      **In-App Purchase** → **+** → generate a key → download the `.p8`.
    - **app.revenuecat.com** → project **Cubex** → **Apps** → **Cubex iOS**
      → paste the key, its Key ID, and your Issuer ID.
-   - Or, from a terminal you are sitting at: `rc setup apple app7417aeca64`
+   - Or, from a terminal you are sitting at: `rc setup apple appdcf8a0f5c1`
      (it will ask for your Apple ID, password and a 2FA code).
 2. **Google Play service account credentials**: RevenueCat → **Cubex Android**
    → upload the JSON from `~/Certificates/play-store-service-account.json`, and
