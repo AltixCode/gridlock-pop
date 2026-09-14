@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 import mobileAds, {
   AdEventType,
   AdsConsent,
+  AdsConsentDebugGeography,
   InterstitialAd,
   MaxAdContentRating,
   RewardedAd,
@@ -47,7 +48,16 @@ export function getConsentSummary(): ConsentSummary {
  */
 async function gatherConsent(): Promise<ConsentSummary> {
   try {
-    const info = (await AdsConsent.gatherConsent()) as unknown as ConsentInfoLike;
+    /**
+     * In development the geography is forced so both paths can be exercised on a simulator:
+     * `EEA` makes the consent form appear every launch, `OTHER` skips it. Release builds pass
+     * no options at all and let the SDK decide from the real location.
+     */
+    const options = IS_DEV
+      ? { debugGeography: AdsConsentDebugGeography.OTHER, testDeviceIdentifiers: [] }
+      : undefined;
+
+    const info = (await AdsConsent.gatherConsent(options)) as unknown as ConsentInfoLike;
     return summariseConsent(info);
   } catch {
     // Fail closed: no consent information means no ads, and the game plays on regardless.

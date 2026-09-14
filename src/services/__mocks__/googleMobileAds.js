@@ -1,6 +1,7 @@
 /* Jest mock for react-native-google-mobile-ads. */
 const AdEventType = { LOADED: 'loaded', ERROR: 'error', CLOSED: 'closed', OPENED: 'opened' };
 const RewardedAdEventType = { LOADED: 'rewarded_loaded', EARNED_REWARD: 'rewarded_earned_reward' };
+const AdsConsentDebugGeography = { DISABLED: 0, EEA: 1, REGULATED_US_STATE: 3, OTHER: 4 };
 const MaxAdContentRating = { G: 'G', PG: 'PG', T: 'T', MA: 'MA' };
 const BannerAdSize = { ANCHORED_ADAPTIVE_BANNER: 'ANCHORED_ADAPTIVE_BANNER' };
 const TestIds = {
@@ -79,6 +80,7 @@ module.exports = {
   BannerAdSize,
   TestIds,
   AdsConsent,
+  AdsConsentDebugGeography,
   __lastAd,
   __resetAds,
   InterstitialAd,

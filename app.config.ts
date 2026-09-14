@@ -119,6 +119,9 @@ const config: ExpoConfig = {
   },
   web: { favicon: './assets/favicon.png' },
   plugins: [
+    // iOS 26+ SDK refuses to launch apps that have not adopted the UIScene lifecycle, which
+    // Expo SDK 57 / RN 0.86 do not yet generate. Drop this once the template does it itself.
+    './plugins/withUIScene',
     [
       'expo-splash-screen',
       {
