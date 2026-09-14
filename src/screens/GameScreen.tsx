@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Board, BOARD_PADDING } from '../components/Board';
+import { Board, BOARD_PADDING, type BoardHandle } from '../components/Board';
 import { AdBanner } from '../components/AdBanner';
 import { GameOverOverlay } from '../components/GameOverOverlay';
 import { PauseOverlay } from '../components/PauseOverlay';
@@ -48,6 +48,7 @@ export function GameScreen({ onExit, onOpenSettings }: GameScreenProps) {
   const [watchingAd, setWatchingAd] = useState(false);
   const [paused, setPaused] = useState(false);
   const endedRef = useRef(false);
+  const boardRef = useRef<BoardHandle>(null);
 
   // Board sizing: the board is the one element that must never be cramped, so it takes the
   // width it can get and everything else lays out around it.
@@ -83,6 +84,8 @@ export function GameScreen({ onExit, onOpenSettings }: GameScreenProps) {
   );
 
   const handleDragStart = useCallback((slot: number) => {
+    // Re-read the board's window position: it can have moved since the last layout pass.
+    boardRef.current?.measure();
     setDragging(useGameStore.getState().game.pieces[slot] ?? null);
   }, []);
 
@@ -224,6 +227,7 @@ export function GameScreen({ onExit, onOpenSettings }: GameScreenProps) {
 
         <View style={styles.boardArea}>
           <Board
+            ref={boardRef}
             grid={game.grid}
             cellSize={cellSize}
             preview={preview}
@@ -238,7 +242,6 @@ export function GameScreen({ onExit, onOpenSettings }: GameScreenProps) {
             trayCellSize={trayCellSize}
             slotWidth={slotWidth}
             geometry={geometry}
-            canPlaceAt={(slot, row, col) => useGameStore.getState().canPlace(slot, row, col)}
             onDragStart={handleDragStart}
             onPreview={handlePreview}
             onDrop={handleDrop}

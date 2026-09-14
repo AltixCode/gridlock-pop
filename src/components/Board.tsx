@@ -1,4 +1,11 @@
-import React, { memo, useEffect, useRef } from 'react';
+import React, {
+  forwardRef,
+  memo,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 import { StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -12,6 +19,11 @@ import { GRID_SIZE, type CompletedLines, type Grid } from '../game';
 import { colors, radius, spacing } from '../theme/tokens';
 
 export const BOARD_PADDING = spacing.sm;
+
+export interface BoardHandle {
+  /** Re-reads the board's absolute origin. Call before relying on it. */
+  measure: () => void;
+}
 
 interface PreviewState {
   cells: string[];
@@ -69,15 +81,29 @@ function LineBurst({ cellSize, lines }: { cellSize: number; lines: CompletedLine
   );
 }
 
-function BoardComponent({ grid, cellSize, preview, clearing, onMeasure }: BoardProps) {
+function BoardComponent(
+  { grid, cellSize, preview, clearing, onMeasure }: BoardProps,
+  ref: React.Ref<BoardHandle>,
+) {
   const containerRef = useRef<View>(null);
 
-  const handleLayout = (_: LayoutChangeEvent) => {
+  const measure = useCallback(() => {
     // measureInWindow gives the absolute page origin the drag layer maps finger positions against.
     containerRef.current?.measureInWindow((x, y) =>
       onMeasure(x + BOARD_PADDING, y + BOARD_PADDING),
     );
-  };
+  }, [onMeasure]);
+
+  /**
+   * onLayout alone is not enough. It fires when the board's layout *within its parent* changes,
+   * but the value we need is its position in the window — and that can move without onLayout
+   * firing at all (late safe-area insets, the ad banner mounting when consent resolves, the
+   * Android status bar being applied after first paint). A stale origin sends every drop to the
+   * wrong row, so the drag re-measures before it starts.
+   */
+  useImperativeHandle(ref, () => ({ measure }), [measure]);
+
+  const handleLayout = (_: LayoutChangeEvent) => measure();
 
   const previewCells = preview ? new Set(preview.cells) : null;
 
@@ -123,4 +149,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Board = memo(BoardComponent);
+export const Board = memo(forwardRef<BoardHandle, BoardProps>(BoardComponent));

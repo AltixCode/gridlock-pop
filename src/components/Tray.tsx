@@ -26,7 +26,6 @@ interface TrayProps {
   trayCellSize: number;
   slotWidth: number;
   geometry: DragGeometry;
-  canPlaceAt: (slot: number, row: number, col: number) => boolean;
   onDragStart: (slot: number) => void;
   onPreview: (slot: number, row: number, col: number) => void;
   onDrop: (slot: number, row: number, col: number) => void;
@@ -47,7 +46,7 @@ function TraySlot({
   onDragEnd,
   onAccessiblePlace,
   describePiece,
-}: Omit<TrayProps, 'pieces' | 'canPlaceAt'> & { piece: Piece | null; slot: number }) {
+}: Omit<TrayProps, 'pieces'> & { piece: Piece | null; slot: number }) {
   const lifted = useSharedValue(0);
   const lastRow = useSharedValue(-99);
   const lastCol = useSharedValue(-99);

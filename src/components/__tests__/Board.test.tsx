@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import { Board } from '../Board';
+import { Board, type BoardHandle } from '../Board';
 import { createEmptyGrid } from '../../game';
 
 describe('Board', () => {
@@ -30,5 +30,26 @@ describe('Board', () => {
       />,
     );
     expect(view.getByLabelText('Game board')).toBeTruthy();
+  });
+
+  it('exposes an imperative re-measure so a stale origin can be refreshed', async () => {
+    // The board's window position can move without onLayout firing (late safe-area insets, the
+    // ad banner mounting). The drag calls this before it starts.
+    const onMeasure = jest.fn();
+    const ref = React.createRef<BoardHandle>();
+
+    await render(
+      <Board
+        ref={ref}
+        grid={createEmptyGrid()}
+        cellSize={32}
+        preview={null}
+        clearing={null}
+        onMeasure={onMeasure}
+      />,
+    );
+
+    expect(typeof ref.current?.measure).toBe('function');
+    expect(() => ref.current?.measure()).not.toThrow();
   });
 });
