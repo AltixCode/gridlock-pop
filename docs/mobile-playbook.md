@@ -93,6 +93,13 @@ created.
 
 > create app → upload an AAB to internal testing → *then* create the product
 
+**Check the package name Play expects before building.** A Play app record can
+already carry a package name, and the first upload is rejected outright if the
+bundle disagrees ("Your APK or Android App Bundle needs to have the package name
+X"). Neither side can be edited afterwards, so confirm it matches
+`android.package` *before* spending a build. The Android package and the iOS
+bundle id are allowed to differ — neither is user-visible.
+
 Build that AAB from a **non-production profile** so it does not carry real ad
 units — internal testers should not generate live impressions.
 
