@@ -73,6 +73,8 @@ const SK_AD_NETWORK_ITEMS = [
   '3qcr597p9d.skadnetwork',
 ];
 
+// Marketing version only. Build numbers live on EAS (eas.json appVersionSource: remote),
+// so they are deliberately absent here.
 const VERSION = '1.0.0';
 
 const config: ExpoConfig = {
@@ -90,7 +92,6 @@ const config: ExpoConfig = {
     // Kept from the app's brief life as "Cubex": Apple does not allow an existing
     // App Store Connect record's bundle id to change, and it is never user-visible.
     bundleIdentifier: 'com.altixcode.cubex',
-    buildNumber: '1',
     supportsTablet: true,
     requireFullScreen: false,
     config: {
@@ -104,7 +105,6 @@ const config: ExpoConfig = {
   },
   android: {
     package: 'com.altixcode.cubex',
-    versionCode: 1,
     adaptiveIcon: {
       backgroundColor: '#0B1020',
       foregroundImage: './assets/android-icon-foreground.png',
@@ -163,8 +163,11 @@ const config: ExpoConfig = {
     ],
   ],
   runtimeVersion: { policy: 'appVersion' },
+  // The EAS project lives under the altixcodes-team account; the project id is a public
+  // identifier, not a secret, and eas-cli cannot write it into a dynamic config itself.
+  owner: 'altixcodes-team',
   extra: {
-    eas: { projectId: process.env.EAS_PROJECT_ID },
+    eas: { projectId: process.env.EAS_PROJECT_ID ?? '8f2f620e-5448-4971-aacc-13f6a797c347' },
   },
 };
 
