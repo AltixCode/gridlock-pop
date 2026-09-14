@@ -104,7 +104,10 @@ const config: ExpoConfig = {
     },
   },
   android: {
-    package: 'com.altixcode.cubex',
+    // Android's package is set by the Play Console record and cannot change there; iOS is
+    // locked to com.altixcode.cubex by its App Store Connect record. They are allowed to
+    // differ, and neither is user-visible.
+    package: 'com.altixcode.gridlockpop',
     adaptiveIcon: {
       backgroundColor: '#0B1020',
       foregroundImage: './assets/android-icon-foreground.png',
