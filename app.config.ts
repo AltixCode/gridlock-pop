@@ -76,18 +76,18 @@ const SK_AD_NETWORK_ITEMS = [
 const VERSION = '1.0.0';
 
 const config: ExpoConfig = {
-  name: 'BlockJam',
-  slug: 'blockjam',
+  name: 'Cubex',
+  slug: 'cubex',
   version: VERSION,
   orientation: 'portrait',
   icon: './assets/icon.png',
-  scheme: 'blockjam',
+  scheme: 'cubex',
   userInterfaceStyle: 'dark',
   backgroundColor: '#0B1020',
   primaryColor: '#FBBF24',
   assetBundlePatterns: ['**/*'],
   ios: {
-    bundleIdentifier: 'com.altixcode.blockjam',
+    bundleIdentifier: 'com.altixcode.cubex',
     buildNumber: '1',
     supportsTablet: true,
     requireFullScreen: false,
@@ -101,7 +101,7 @@ const config: ExpoConfig = {
     },
   },
   android: {
-    package: 'com.altixcode.blockjam',
+    package: 'com.altixcode.cubex',
     versionCode: 1,
     adaptiveIcon: {
       backgroundColor: '#0B1020',

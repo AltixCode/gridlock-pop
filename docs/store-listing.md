@@ -4,10 +4,10 @@
 
 | Field                           | Value                                                             |
 | ------------------------------- | ----------------------------------------------------------------- |
-| App name                        | BlockJam                                                          |
+| App name                        | Cubex                                                             |
 | Subtitle (iOS, 30 chars)        | Block puzzle, pure and quick                                      |
 | Short description (Android, 80) | Drop blocks, clear lines, chase the combo. No timer, no pressure. |
-| Bundle id / package             | `com.altixcode.blockjam`                                          |
+| Bundle id / package             | `com.altixcode.cubex`                                             |
 | Category                        | Games → Puzzle (secondary: Casual)                                |
 | Age rating                      | 4+ / Everyone — contains ads, no user content, no gambling        |
 | Price                           | Free, with one optional in-app purchase                           |
@@ -16,7 +16,7 @@
 
 > **Drop blocks. Clear lines. Chase the combo.**
 >
-> BlockJam is a block puzzle stripped back to the part that feels good: place a piece,
+> Cubex is a block puzzle stripped back to the part that feels good: place a piece,
 > watch a line vanish, line up the next one. No timer. No lives. No pressure — just you
 > and an 8×8 grid that keeps asking for one more move.
 >
@@ -107,7 +107,7 @@ of the Families programme and its extra ad restrictions), **Content rating quest
 | Field                | Value                                                                                                                                                 |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Reference name       | Remove Ads (Lifetime)                                                                                                                                 |
-| Product id (iOS)     | `com.altixcode.blockjam.removeads`                                                                                                                    |
+| Product id (iOS)     | `com.altixcode.cubex.removeads`                                                                                                                       |
 | Product id (Android) | `remove_ads`                                                                                                                                          |
 | Type                 | Non-consumable / one-time                                                                                                                             |
 | Price tier           | US$3.99 (test 2.99 vs 4.99 after the first 1k installs)                                                                                               |

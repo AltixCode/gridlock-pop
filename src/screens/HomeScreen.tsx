@@ -102,7 +102,7 @@ export function HomeScreen({ onPlay, onOpenSettings, onRemoveAds }: HomeScreenPr
         <Animated.View entering={FadeInUp.duration(400)} style={styles.hero}>
           <Hero />
           <Text style={[type.display, styles.title]} maxFontSizeMultiplier={MAX_DISPLAY_FONT_SCALE}>
-            BlockJam
+            Cubex
           </Text>
           <Text style={[type.caption, styles.subtitle]}>
             Drop blocks. Clear lines. Chase the combo.

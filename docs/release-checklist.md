@@ -32,7 +32,7 @@ Add `EXPO_TOKEN` (Expo → Access Tokens) to the GitHub repo secrets so CI can b
 
 1. Create the project, add the iOS and Android apps.
 2. Create one **non-consumable / one-time** product in each store:
-   - App Store Connect: `com.altixcode.blockjam.removeads`
+   - App Store Connect: `com.altixcode.cubex.removeads`
    - Play Console: `remove_ads`
 3. In RevenueCat create entitlement **`remove_ads`** and attach both products.
 4. Create offering **`default`** with a package of type **Lifetime** containing them.

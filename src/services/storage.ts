@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const STORAGE_KEYS = {
-  progress: 'blockjam.progress.v1',
-  settings: 'blockjam.settings.v1',
-  ads: 'blockjam.ads.v1',
+  progress: 'cubex.progress.v1',
+  settings: 'cubex.settings.v1',
+  ads: 'cubex.ads.v1',
 } as const;
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];
