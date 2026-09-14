@@ -103,6 +103,21 @@ bundle id are allowed to differ — neither is user-visible.
 Build that AAB from a **non-production profile** so it does not carry real ad
 units — internal testers should not generate live impressions.
 
+**Check the upload key too.** If the Play record already has an upload key from
+an earlier build, a fresh EAS keystore is rejected with *"Your Android App Bundle
+is signed with the wrong key."* Compare Play Console -> App integrity -> App
+signing -> **Upload key certificate** SHA-1 against the AAB's:
+
+```bash
+unzip -o -q app.aab -d /tmp/aab && keytool -printcert -file /tmp/aab/META-INF/*.RSA | grep SHA1
+```
+
+If they differ and the original keystore is lost, export the EAS certificate
+(`keytool -printcert -rfc -file ...RSA > upload-certificate.pem`) and use
+**Request upload key reset** — Google takes a couple of days. If the original
+keystore exists, `eas credentials --platform android` and upload it instead;
+no reset needed.
+
 ### 5. AdMob — manual
 
 Two apps, three ad units each (banner / interstitial / rewarded). Answer **"No,
