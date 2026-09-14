@@ -64,7 +64,28 @@ Average session length is controlled by two things:
 2. `generateFairBag` is used for the opening hand and the revive only. Mid-run refills are
    an honest draw; guaranteeing a playable bag every turn makes runs effectively endless.
 
-Target: a 2–4 minute average run. Re-measure after any weight change.
+`npm run balance` plays thousands of headless runs and reports what those weights actually
+produce, so tuning is measured rather than guessed. Two bots bracket real play: a careless
+one taking any legal move, and a competent one that clears when it can and avoids
+fragmenting the board.
+
+Measured over 2000 runs each. Move counts are measured; the minute figures assume 2.2s
+per placement (an estimate — worth checking against real play during device QA):
+
+|                        | careless | competent   |
+| ---------------------- | -------- | ----------- |
+| median moves           | 17       | 77          |
+| median session         | 0.6 min  | **2.8 min** |
+| p10 / p90 moves        | 11 / 26  | 23 / 227    |
+| median score           | 63       | 620         |
+| runs ending ≤ 10 moves | 2.5%     | 0.4%        |
+
+The competent median lands inside the 2–4 minute target, and skill is worth roughly 5× the
+session length — which is what makes "one more go" work. Note the floor: a player who is
+still learning gets ~1 minute runs, and that is the experience Day-1 retention is decided on.
+
+`src/game/__tests__/balance.test.ts` guards these bounds in CI. It is a regression guard, not
+a pin: making the 5-cell pieces common collapses the competent median to 0.7 min and fails it.
 
 ## Monetisation
 

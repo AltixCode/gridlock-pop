@@ -18,7 +18,7 @@ module.exports = [
   },
   {
     // Build scripts run in Node, not in the app runtime.
-    files: ['scripts/**/*.mjs', '*.config.js', 'jest.config.js'],
+    files: ['scripts/**/*.mjs', 'scripts/**/*.ts', '*.config.js', 'jest.config.js'],
     languageOptions: {
       globals: {
         Buffer: 'readonly',
