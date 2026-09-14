@@ -34,7 +34,14 @@ Values you will need throughout:
 3. Send it to me, or run it yourself:
 
    ```bash
-   gh secret set EXPO_TOKEN --repo atasmohammadi/gridlock-pop
+   gh secret set EXPO_TOKEN --repo AltixCode/gridlock-pop
+   ```
+
+   **Also add it to `~/.zshrc`**, so local `eas` commands work too — the GitHub
+   secret is write-only and cannot be read back, so it only helps CI:
+
+   ```bash
+   echo 'export EXPO_TOKEN=<token>' >> ~/.zshrc
    ```
 
 **I continue with:** `eas init` (creates the EAS project and writes
@@ -77,6 +84,13 @@ Same shape: the Publishing API works on apps that already exist.
 2. Open **Monetize → Products → In-app products** once and confirm the merchant
    account is active. If Play asks you to set up a payments profile, do that now —
    IAPs cannot be created until it exists.
+
+   > **Ordering, verified 2026-09-14:** a Play app has **no package name until the
+   > first bundle is uploaded**. Until then the Publishing API answers
+   > `404 Package not found: com.altixcode.cubex`, and the `remove_ads` product
+   > cannot be created. So the real sequence is: create the app → upload an AAB to
+   > internal testing → _then_ create the IAP. I handle the last two.
+
 3. Optional but saves a round trip: **Test and release → Testing → Internal
    testing** → create a track and add your own email as a tester.
 
