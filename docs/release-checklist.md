@@ -77,9 +77,16 @@ Both stores reject an app whose privacy URL 404s.
 ## 2. Each release
 
 ```bash
-npm run verify                 # lint + types + 127 tests
+npm run verify                 # lint + types + full test suite
 npm run doctor                 # expo-doctor, 21 checks
+npm run check:release          # refuses a build that would ship test ad units
 ```
+
+`check:release` is the one that matters before a store build. A missing AdMob or RevenueCat
+identifier does not crash anything — the app falls back to Google's test units, plays
+perfectly, and earns nothing, which you would only notice as a flat revenue line weeks after
+the UA spend went out. The check fails on absent, blank, _or still-a-test-unit_ values, and
+the production path of the EAS Build workflow runs it automatically.
 
 1. Bump `version` in `app.config.ts` (build numbers auto-increment via `appVersionSource: remote`).
 2. Tag it: `git tag v1.0.1 && git push --tags` → the **EAS Build** workflow runs

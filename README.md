@@ -126,6 +126,13 @@ never serve or click a live ad.
 Secrets that must never be `EXPO_PUBLIC_*` (they are not needed by the app): RevenueCat
 secret API key, Google Play service account JSON, App Store Connect API key.
 
+**A missing identifier is not a crash — it is a silent zero.** The app falls back to Google's
+test ad units, plays perfectly and earns nothing, which only surfaces as a flat revenue line
+weeks after the UA spend went out. `npm run check:release` refuses any build whose identifiers
+are absent, blank, or still a test unit, and it gates `npm run build:production` and the
+production path of the EAS Build workflow. Preview builds are deliberately not gated — they
+are meant to run on test units.
+
 ## Release
 
 See [`docs/release-checklist.md`](docs/release-checklist.md) for the full runbook and

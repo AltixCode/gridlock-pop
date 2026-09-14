@@ -59,10 +59,11 @@
     "doctor": "npx expo-doctor",
     "prebuild": "expo prebuild --clean",
     "build:preview": "eas build --profile preview --platform all",
-    "build:production": "eas build --profile production --platform all",
+    "build:production": "npm run check:release && eas build --profile production --platform all",
     "submit:production": "eas submit --profile production --platform all --latest",
     "verify": "npm run lint && npm run typecheck && npm run test:ci",
-    "balance": "tsx scripts/balance.ts"
+    "balance": "tsx scripts/balance.ts",
+    "check:release": "tsx scripts/check-release-config.ts"
   },
   "private": true
 }

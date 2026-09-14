@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import { missingReleaseConfigFrom, RELEASE_ENV_KEYS, selectPlatformValue } from './releaseConfig';
 
 /**
  * All third-party identifiers come from EXPO_PUBLIC_* env vars (wired through EAS build
@@ -11,8 +12,7 @@ import { Platform } from 'react-native';
  */
 
 function pick(ios?: string, android?: string): string | undefined {
-  const value = Platform.select({ ios, android, default: ios ?? android });
-  return value && value.length > 0 ? value : undefined;
+  return selectPlatformValue(ios, android, Platform.OS);
 }
 
 export const IS_DEV = __DEV__;
@@ -43,3 +43,5 @@ export const PRIVACY_POLICY_URL =
 export const TERMS_URL =
   process.env.EXPO_PUBLIC_TERMS_URL ?? 'https://atasmohammadi.github.io/blockjam/legal/terms.html';
 export const SUPPORT_EMAIL = process.env.EXPO_PUBLIC_SUPPORT_EMAIL ?? 'support@altixcode.com';
+
+export { missingReleaseConfigFrom, RELEASE_ENV_KEYS, selectPlatformValue };
