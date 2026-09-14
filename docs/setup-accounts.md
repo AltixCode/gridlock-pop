@@ -25,6 +25,36 @@ Values you will need throughout:
 > users, so this is cosmetic. Changing it would mean deleting the ASC record and
 > recreating the RevenueCat apps, which invalidates the public SDK keys.
 
+## Status — updated 2026-09-14
+
+| Step                           | State                                                                                                  |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| Expo / EAS                     | **done** — project `@altixcodes-team/gridlock-pop`, `EXPO_TOKEN` in repo secrets and `~/.zshrc`        |
+| App Store Connect app record   | **done** — app id `6811911887`                                                                         |
+| iOS in-app purchase            | **done** — IAP `6811944185`, `com.altixcode.cubex.removeads`, non-consumable, $3.99 in 175 territories |
+| AdMob apps + ad units          | **done** — see ids below                                                                               |
+| Play Console app record        | **done** (by you) — package not yet assigned, waiting on first upload                                  |
+| Play in-app product            | blocked on the first AAB reaching the internal track                                                   |
+| AdMob consent messages         | **yours** — see step 4                                                                                 |
+| RevenueCat In-App Purchase key | **yours** — needs Apple 2FA, see step 5                                                                |
+
+Reference ids (the ad identifiers themselves live in EAS env vars and repo
+secrets, never in git):
+
+| Thing                       | Id                                                                                  |
+| --------------------------- | ----------------------------------------------------------------------------------- |
+| App Store Connect app       | `6811911887`                                                                        |
+| App Store Connect IAP       | `6811944185`                                                                        |
+| AdMob iOS app (console)     | `8566829614`                                                                        |
+| AdMob Android app (console) | `4278256931`                                                                        |
+| RevenueCat product          | `prod04aa7ef02a`, attached to the lifetime package and the `remove_ads` entitlement |
+
+> **Ad serving is limited until the app is published.** AdMob flags every new
+> app as _Requires review — limited ad serving_ until it is linked to a live
+> store listing and approved, which takes a couple of days. Expect little or no
+> ad revenue in the first days after launch even when everything is wired up
+> correctly; this is not a bug in the integration.
+
 ---
 
 ## 1. Expo — 2 minutes (do this first, it unblocks the most)
