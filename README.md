@@ -135,6 +135,8 @@ are meant to run on test units.
 
 ## Release
 
+Start with [`docs/setup-accounts.md`](docs/setup-accounts.md) — the account
+steps that only a human can do, and what happens automatically after each.
 See [`docs/release-checklist.md`](docs/release-checklist.md) for the full runbook and
 [`docs/store-listing.md`](docs/store-listing.md) for listing copy, ASO keywords and the
 Data Safety / privacy answers both stores ask for.
