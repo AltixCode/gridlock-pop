@@ -65,6 +65,11 @@ export function GameScreen({ onExit, onOpenSettings }: GameScreenProps) {
   const dragX = useSharedValue(0);
   const dragY = useSharedValue(0);
   const activeSlot = useSharedValue(-1);
+  // The dragged piece's footprint in cells. These have to be shared values: the drag style is a
+  // worklet on the UI thread, and calling a plain JS helper from there throws
+  // "Tried to synchronously call a Remote Function".
+  const dragCellsWide = useSharedValue(0);
+  const dragCellsHigh = useSharedValue(0);
 
   const geometry = useMemo(
     () => ({ boardX, boardY, cellSize: cellSizeShared, dragX, dragY, activeSlot }),
@@ -83,11 +88,18 @@ export function GameScreen({ onExit, onOpenSettings }: GameScreenProps) {
     [boardX, boardY],
   );
 
-  const handleDragStart = useCallback((slot: number) => {
-    // Re-read the board's window position: it can have moved since the last layout pass.
-    boardRef.current?.measure();
-    setDragging(useGameStore.getState().game.pieces[slot] ?? null);
-  }, []);
+  const handleDragStart = useCallback(
+    (slot: number) => {
+      // Re-read the board's window position: it can have moved since the last layout pass.
+      boardRef.current?.measure();
+
+      const piece = useGameStore.getState().game.pieces[slot] ?? null;
+      dragCellsWide.value = piece ? shapeWidth(piece) : 0;
+      dragCellsHigh.value = piece ? shapeHeight(piece) : 0;
+      setDragging(piece);
+    },
+    [dragCellsWide, dragCellsHigh],
+  );
 
   const handlePreview = useCallback((slot: number, row: number, col: number) => {
     const state = useGameStore.getState();
@@ -199,13 +211,13 @@ export function GameScreen({ onExit, onOpenSettings }: GameScreenProps) {
 
   const dragStyle = useAnimatedStyle(() => {
     const cell = cellSizeShared.value;
-    const w = (dragging ? shapeWidth(dragging) : 0) * cell;
-    const h = (dragging ? shapeHeight(dragging) : 0) * cell;
+    const w = dragCellsWide.value * cell;
+    const h = dragCellsHigh.value * cell;
     return {
       opacity: activeSlot.value >= 0 ? 1 : 0,
       transform: [{ translateX: dragX.value - w / 2 }, { translateY: dragY.value - h - DRAG_LIFT }],
     };
-  }, [dragging]);
+  });
 
   const describePiece = useCallback(
     (piece: Piece) => `Piece ${piece.shapeId.replace(/([A-Z0-9])/g, ' $1').toLowerCase()}`,
