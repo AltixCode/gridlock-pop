@@ -38,6 +38,6 @@ describe('storage', () => {
   });
 
   it('namespaces every key', () => {
-    Object.values(STORAGE_KEYS).forEach((key) => expect(key.startsWith('cubex.')).toBe(true));
+    Object.values(STORAGE_KEYS).forEach((key) => expect(key.startsWith('gridlockpop.')).toBe(true));
   });
 });

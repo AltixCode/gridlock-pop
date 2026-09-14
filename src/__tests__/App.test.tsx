@@ -20,7 +20,7 @@ describe('App', () => {
   it('opens on the home screen', async () => {
     const view = await render(<App />);
     expect(view.getByLabelText('Play')).toBeTruthy();
-    expect(view.getByText('Cubex')).toBeTruthy();
+    expect(view.getByText('Gridlock Pop')).toBeTruthy();
   });
 
   it('starts a run and shows the board and a full tray', async () => {

@@ -4,7 +4,7 @@
 
 | Field                           | Value                                                             |
 | ------------------------------- | ----------------------------------------------------------------- |
-| App name                        | Cubex                                                             |
+| App name                        | Gridlock Pop                                                      |
 | Subtitle (iOS, 30 chars)        | Block puzzle, pure and quick                                      |
 | Short description (Android, 80) | Drop blocks, clear lines, chase the combo. No timer, no pressure. |
 | Bundle id / package             | `com.altixcode.cubex`                                             |
@@ -16,7 +16,7 @@
 
 > **Drop blocks. Clear lines. Chase the combo.**
 >
-> Cubex is a block puzzle stripped back to the part that feels good: place a piece,
+> Gridlock Pop is a block puzzle stripped back to the part that feels good: place a piece,
 > watch a line vanish, line up the next one. No timer. No lives. No pressure — just you
 > and an 8×8 grid that keeps asking for one more move.
 >

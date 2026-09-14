@@ -8,8 +8,8 @@ Values you will need throughout:
 
 | Thing                  | Value                                                                                                      |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------- |
-| App name               | Cubex                                                                                                      |
-| Bundle ID / package    | `com.altixcode.cubex` (already registered in Apple's portal)                                               |
+| App name               | Gridlock Pop                                                                                               |
+| Bundle ID / package    | `com.altixcode.cubex` — **deliberately does not match the name**; see note below                           |
 | iOS IAP product id     | `com.altixcode.cubex.removeads`                                                                            |
 | Android IAP product id | `remove_ads`                                                                                               |
 | Entitlement            | `remove_ads`                                                                                               |
@@ -18,16 +18,23 @@ Values you will need throughout:
 | RevenueCat iOS app     | `appdcf8a0f5c1`                                                                                            |
 | RevenueCat Android app | `app33f836eae0`                                                                                            |
 
+> **Why the bundle id says `cubex`.** The app was briefly called Cubex, and the
+> App Store Connect record was created under that bundle id. Apple does not allow
+> the bundle id or SKU of an existing app record to be changed — only the name,
+> which is now Gridlock Pop. Neither the bundle id nor the SKU is ever shown to
+> users, so this is cosmetic. Changing it would mean deleting the ASC record and
+> recreating the RevenueCat apps, which invalidates the public SDK keys.
+
 ---
 
 ## 1. Expo — 2 minutes (do this first, it unblocks the most)
 
 1. Go to **expo.dev** → sign in → **Account settings** → **Access tokens**.
-2. **Create token**, name it `cubex-ci`, copy the value.
+2. **Create token**, name it `gridlock-pop-ci`, copy the value.
 3. Send it to me, or run it yourself:
 
    ```bash
-   gh secret set EXPO_TOKEN --repo atasmohammadi/cubex
+   gh secret set EXPO_TOKEN --repo atasmohammadi/gridlock-pop
    ```
 
 **I continue with:** `eas init` (creates the EAS project and writes
@@ -44,10 +51,10 @@ This is the one Apple step that must be done in the browser.
 1. **appstoreconnect.apple.com** → **Apps** → **+** → **New App**.
 2. Fill in:
    - Platform: **iOS**
-   - Name: **Cubex**
+   - Name: **Gridlock Pop**
    - Primary language: **English (U.S.)**
    - Bundle ID: pick **com.altixcode.cubex** from the dropdown (already registered)
-   - SKU: `cubex-ios`
+   - SKU: `gridlock-pop-ios`
    - User Access: Full Access
 3. Click **Create**. Stop there — do not fill in any metadata.
 
@@ -62,7 +69,7 @@ uploading the build. Screenshots are the only asset I will ask you for.
 Same shape: the Publishing API works on apps that already exist.
 
 1. **play.google.com/console** → **Create app**.
-   - App name: **Cubex**
+   - App name: **Gridlock Pop**
    - Default language: **English (United States)**
    - App or game: **Game**
    - Free or paid: **Free**
@@ -92,11 +99,11 @@ No public API creates apps or ad units, so all of this is console work.
 1. **apps.admob.com** → **Apps** → **Add app**.
    - Platform **iOS**, "Is the app listed on a supported app store?" → **Yes** if
      you finished step 2, otherwise **No** and link it later.
-   - App name: **Cubex**. Repeat for **Android**.
+   - App name: **Gridlock Pop**. Repeat for **Android**.
 2. For **each** of the two apps, create three ad units (**Ad units → Add ad unit**):
-   - **Banner** — name it `cubex-banner`, format **Anchored adaptive**
-   - **Interstitial** — `cubex-interstitial`
-   - **Rewarded** — `cubex-rewarded`. When it asks for reward settings use
+   - **Banner** — name it `gridlock-pop-banner`, format **Anchored adaptive**
+   - **Interstitial** — `gridlock-pop-interstitial`
+   - **Rewarded** — `gridlock-pop-rewarded`. When it asks for reward settings use
      amount **1**, type **continue**.
 3. Collect **ten** identifiers: 2 app ids (`ca-app-pub-…~…`, note the **tilde**)
    and 8 ad unit ids (`ca-app-pub-…/…`, note the **slash**).
@@ -131,11 +138,11 @@ Connect API key is configured. Two things need you.
    2FA so I cannot do it):
    - **appstoreconnect.apple.com** → **Users and Access** → **Integrations** →
      **In-App Purchase** → **+** → generate a key → download the `.p8`.
-   - **app.revenuecat.com** → project **Cubex** → **Apps** → **Cubex iOS**
+   - **app.revenuecat.com** → project **Gridlock Pop** → **Apps** → **Gridlock Pop iOS**
      → paste the key, its Key ID, and your Issuer ID.
    - Or, from a terminal you are sitting at: `rc setup apple appdcf8a0f5c1`
      (it will ask for your Apple ID, password and a 2FA code).
-2. **Google Play service account credentials**: RevenueCat → **Cubex Android**
+2. **Google Play service account credentials**: RevenueCat → **Gridlock Pop Android**
    → upload the JSON from `~/Certificates/play-store-service-account.json`, and
    grant that service account **View financial data** in Play Console →
    Users and permissions.

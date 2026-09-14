@@ -1,4 +1,4 @@
-# Cubex
+# Gridlock Pop
 
 An 8×8 block puzzle for iOS and Android. Drop polyomino pieces, clear rows and columns,
 chase the combo. Built with Expo (React Native + TypeScript), monetised with AdMob and a

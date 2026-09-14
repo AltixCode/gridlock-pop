@@ -39,9 +39,10 @@ export const REVENUECAT_API_KEY = pick(
 
 export const PRIVACY_POLICY_URL =
   process.env.EXPO_PUBLIC_PRIVACY_POLICY_URL ??
-  'https://atasmohammadi.github.io/cubex/legal/privacy.html';
+  'https://atasmohammadi.github.io/gridlock-pop/legal/privacy.html';
 export const TERMS_URL =
-  process.env.EXPO_PUBLIC_TERMS_URL ?? 'https://atasmohammadi.github.io/cubex/legal/terms.html';
+  process.env.EXPO_PUBLIC_TERMS_URL ??
+  'https://atasmohammadi.github.io/gridlock-pop/legal/terms.html';
 export const SUPPORT_EMAIL = process.env.EXPO_PUBLIC_SUPPORT_EMAIL ?? 'support@altixcode.com';
 
 export { missingReleaseConfigFrom, RELEASE_ENV_KEYS, selectPlatformValue };

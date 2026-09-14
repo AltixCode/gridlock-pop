@@ -122,7 +122,7 @@ function featureGraphic() {
     ${tiles}
     <text x="${originX + 3 * cell + 56}" y="${H / 2 - 12}"
           font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="82" font-weight="bold"
-          letter-spacing="-2" fill="#F8FAFC">Cubex</text>
+          letter-spacing="-2" fill="#F8FAFC">Gridlock Pop</text>
     <text x="${originX + 3 * cell + 60}" y="${H / 2 + 40}"
           font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="26" font-weight="500"
           letter-spacing="0.4" fill="#9FAECA">Drop blocks. Clear lines. Chase the combo.</text>
@@ -130,5 +130,7 @@ function featureGraphic() {
 }
 
 await mkdir('store-assets', { recursive: true });
-await sharp(Buffer.from(featureGraphic())).png().toFile('store-assets/feature-graphic-1024x500.png');
+await sharp(Buffer.from(featureGraphic()))
+  .png()
+  .toFile('store-assets/feature-graphic-1024x500.png');
 console.log('✓ store-assets/feature-graphic-1024x500.png');

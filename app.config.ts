@@ -76,17 +76,19 @@ const SK_AD_NETWORK_ITEMS = [
 const VERSION = '1.0.0';
 
 const config: ExpoConfig = {
-  name: 'Cubex',
-  slug: 'cubex',
+  name: 'Gridlock Pop',
+  slug: 'gridlock-pop',
   version: VERSION,
   orientation: 'portrait',
   icon: './assets/icon.png',
-  scheme: 'cubex',
+  scheme: 'gridlockpop',
   userInterfaceStyle: 'dark',
   backgroundColor: '#0B1020',
   primaryColor: '#FBBF24',
   assetBundlePatterns: ['**/*'],
   ios: {
+    // Kept from the app's brief life as "Cubex": Apple does not allow an existing
+    // App Store Connect record's bundle id to change, and it is never user-visible.
     bundleIdentifier: 'com.altixcode.cubex',
     buildNumber: '1',
     supportsTablet: true,
