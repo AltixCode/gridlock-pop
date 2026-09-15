@@ -63,7 +63,7 @@
     "submit:production": "eas submit --profile production --platform all --latest",
     "verify": "npm run lint && npm run typecheck && npm run test:ci",
     "balance": "tsx scripts/balance.ts",
-    "check:release": "tsx scripts/check-release-config.ts"
+    "check:release": "node scripts/check-ad-wiring.mjs && tsx scripts/check-release-config.ts"
   },
   "private": true
 }
