@@ -36,6 +36,9 @@ export function AdBanner() {
 
 const styles = StyleSheet.create({
   slot: {
+    // Never squeezed by a sibling that sizes itself to its content.
+    // Ata on an iPad: "some of the ui elements are hidden behind the admob".
+    flexShrink: 0,
     height: BANNER_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
