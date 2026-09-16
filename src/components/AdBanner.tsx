@@ -21,6 +21,16 @@ export function AdBanner() {
   // dead space for a player who declined.
   if (adsRemoved || !canServeAds) return null;
 
+  // Nor while capturing store screenshots. The slot fills a few seconds after
+  // launch, so there is only a brief window between "still mounting" and
+  // "carrying an AdMob test creative with a literal Test mode badge", and a
+  // badge like that has reached App Store Connect before. Stop the slot rather
+  // than race the shutter.
+  //
+  // `__DEV__` is false in every release build, so this is inert in anything
+  // that ships however the environment is set; a capture build is a debug build.
+  if (__DEV__ && process.env.EXPO_PUBLIC_CAPTURE_MODE === '1') return null;
+
   return (
     <View style={styles.slot} accessibilityLabel="Advertisement">
       {failed ? null : (
