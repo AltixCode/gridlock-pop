@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -81,6 +81,10 @@ function Hero() {
 
 export function HomeScreen({ onPlay, onOpenSettings, onRemoveAds }: HomeScreenProps) {
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  // A 1032pt-wide Play button is not a button, it is a stripe. The column keeps
+  // the controls at a size a thumb expects while the gradient takes the rest.
+  const column = width >= 700 ? { maxWidth: 560, width: '100%' as const, alignSelf: 'center' as const } : null;
   const highScore = useGameStore((state) => state.highScore);
   const adsRemoved = usePurchaseStore((state) => state.adsRemoved);
   const priceString = usePurchaseStore((state) => state.priceString);
@@ -93,7 +97,7 @@ export function HomeScreen({ onPlay, onOpenSettings, onRemoveAds }: HomeScreenPr
         pointerEvents="none"
       />
 
-      <View style={[styles.content, { paddingTop: insets.top + spacing.lg }]}>
+      <View style={[styles.content, column, { paddingTop: insets.top + spacing.lg }]}>
         <View style={styles.topBar}>
           <View style={styles.spacer} />
           <IconButton name="settings" label="Settings" onPress={onOpenSettings} />

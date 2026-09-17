@@ -24,7 +24,19 @@ import {
 import { playSound } from '../services/sound';
 import { colors, spacing } from '../theme/tokens';
 
-const MAX_BOARD_WIDTH = 440;
+/**
+ * The widest the board gets, by screen class.
+ *
+ * 440 is a phone measure and it was the only measure. On a 13" iPad that put an
+ * 8x8 grid 440pt wide in the middle of a 1032pt screen -- the board this game is
+ * entirely made of, rendered at phone size with 300pt of empty gradient either
+ * side. The tablet cap is deliberately below the 984pt the screen would allow,
+ * because `height * 0.52` binds first in portrait anyway and the tray below the
+ * board needs the room.
+ */
+const MAX_BOARD_WIDTH_PHONE = 440;
+const MAX_BOARD_WIDTH_TABLET = 720;
+const TABLET_MIN_WIDTH = 700;
 const CLEAR_ANIMATION_MS = 420;
 
 interface GameScreenProps {
@@ -52,7 +64,9 @@ export function GameScreen({ onExit, onOpenSettings }: GameScreenProps) {
 
   // Board sizing: the board is the one element that must never be cramped, so it takes the
   // width it can get and everything else lays out around it.
-  const boardWidth = Math.min(width - spacing.lg * 2, MAX_BOARD_WIDTH, height * 0.52);
+  const maxBoardWidth =
+    width >= TABLET_MIN_WIDTH ? MAX_BOARD_WIDTH_TABLET : MAX_BOARD_WIDTH_PHONE;
+  const boardWidth = Math.min(width - spacing.lg * 2, maxBoardWidth, height * 0.52);
   const cellSize = Math.floor((boardWidth - BOARD_PADDING * 2) / GRID_SIZE);
   const slotWidth = (boardWidth - spacing.sm * 2) / 3;
   const trayCellSize = Math.floor(trayCellSizeFor(slotWidth, cellSize));
