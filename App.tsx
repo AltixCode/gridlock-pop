@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { LogBox, StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ReduceMotion, ReducedMotionConfig } from 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -16,6 +16,24 @@ import { initializeSound } from './src/services/sound';
 import { colors } from './src/theme/tokens';
 
 type Route = 'home' | 'game' | 'settings';
+
+/**
+ * No LogBox toast in a capture build.
+ *
+ * Dropping the RevenueCat log level to ERROR silences chatter but not errors,
+ * and in a simulator the errors are unavoidable -- there is no StoreKit to
+ * reach. React Native draws them as a toast docked at the bottom, which was
+ * photographed sitting across this game's piece tray, cutting all three
+ * playable pieces off mid-shape. The tray underneath was completely intact:
+ * the toast does not break the UI, it makes correct UI *look* broken, which is
+ * its own kind of bad screenshot.
+ *
+ * Gated on `__DEV__` and the capture flag together: an ordinary debug build
+ * keeps its warnings, a release build never reaches the line.
+ */
+if (__DEV__ && process.env.EXPO_PUBLIC_CAPTURE_MODE === '1') {
+  LogBox.ignoreAllLogs(true);
+}
 
 export default function App() {
   const [route, setRoute] = useState<Route>('home');
