@@ -34,6 +34,34 @@ const INITIAL = {
   error: null as string | null,
 };
 
+/**
+ * The price a store screenshot shows when the simulator has no store.
+ *
+ * A StoreKit configuration cannot reach this pipeline. Xcode applies one by
+ * syncing it to the device as part of running a scheme, via
+ * `-[DVTDevice handleStoreKitConfigurationSyncForBundleID:configurationFilePath:]`,
+ * and `xcrun simctl` has no equivalent -- so an `expo run:ios` plus
+ * `simctl launch` build never receives a product catalogue however correct its
+ * .storekit file is. The Remove ads button then renders with no price, and the
+ * IAP review screenshot Apple sees shows a purchase with no cost stated.
+ *
+ * This app stores the price string rather than a package, so the fallback is
+ * the string. The figure comes from `scripts/iap.json`, read out of the App
+ * Store Connect price schedule, so the screenshot states the real cost -- it
+ * simply learns it from the bundle rather than from StoreKit.
+ *
+ * `__DEV__` is false in every release build, so this is inert in anything that
+ * ships, and `packageToBuy` deliberately stays null: the button shows a price
+ * but there is nothing to purchase, which is what a capture wants and what a
+ * real user must never see.
+ */
+function capturePriceString(): string | null {
+  const price = process.env.EXPO_PUBLIC_CAPTURE_PRICE;
+  const capturing = __DEV__ && process.env.EXPO_PUBLIC_CAPTURE_MODE === '1';
+  if (!capturing || !price) return null;
+  return price.startsWith('$') ? price : `$${price}`;
+}
+
 export const usePurchaseStore = create<PurchaseState>((set, get) => ({
   ...INITIAL,
 
@@ -63,9 +91,12 @@ export const usePurchaseStore = create<PurchaseState>((set, get) => ({
         ) ??
         current?.availablePackages?.[0] ??
         null;
-      set({ packageToBuy: pkg, priceString: pkg?.product?.priceString ?? null });
+      set({
+        packageToBuy: pkg,
+        priceString: pkg?.product?.priceString ?? capturePriceString(),
+      });
     } catch {
-      set({ packageToBuy: null, priceString: null });
+      set({ packageToBuy: null, priceString: capturePriceString() });
     }
   },
 
