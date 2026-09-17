@@ -26,6 +26,7 @@ interface HomeScreenProps {
 
 /** A small decorative arrangement of tiles — the game's own vocabulary instead of stock art. */
 function Hero() {
+  const { width } = useWindowDimensions();
   const tiles = [
     { row: 0, col: 1, color: 0 },
     { row: 0, col: 2, color: 0 },
@@ -35,8 +36,13 @@ function Hero() {
     { row: 2, col: 2, color: 2 },
     { row: 2, col: 3, color: 4 },
   ];
-  const size = 34;
-  const gap = 6;
+  // The tile arrangement is the game's own vocabulary, and it was 34pt on every
+  // device -- a postage stamp on a 13" iPad, which is one of the reasons half
+  // that screen read as empty. It is decoration, so it grows with the display
+  // rather than staying a phone-sized ornament.
+  const isTablet = width >= 700;
+  const size = isTablet ? 72 : 34;
+  const gap = isTablet ? 12 : 6;
 
   return (
     <View
@@ -122,7 +128,10 @@ export function HomeScreen({ onPlay, onOpenSettings, onRemoveAds }: HomeScreenPr
 
         <Animated.View entering={FadeInUp.duration(400)} style={styles.hero}>
           <Hero />
-          <Text style={[type.display, styles.title]} maxFontSizeMultiplier={MAX_DISPLAY_FONT_SCALE}>
+          <Text
+            style={[type.display, styles.title, isTablet && styles.titleTablet]}
+            maxFontSizeMultiplier={MAX_DISPLAY_FONT_SCALE}
+          >
             Gridlock Pop
           </Text>
           <Text style={[type.caption, styles.subtitle]}>
@@ -180,6 +189,7 @@ const styles = StyleSheet.create({
   spacer: { width: 48 },
   hero: { alignItems: 'center', gap: spacing.lg },
   title: { fontSize: 46, marginTop: spacing.lg },
+  titleTablet: { fontSize: 64 },
   subtitle: { textAlign: 'center' },
   panel: {
     backgroundColor: colors.surface,
