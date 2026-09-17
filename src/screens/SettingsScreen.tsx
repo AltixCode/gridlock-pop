@@ -18,6 +18,7 @@ import { useAdsStore } from '../store/adsStore';
 import { showPrivacyOptionsForm } from '../services/ads';
 import { PRIVACY_POLICY_URL, SUPPORT_EMAIL, TERMS_URL } from '../config/env';
 import { colors, radius, spacing, type } from '../theme/tokens';
+import { useTabletColumn } from '../theme/useTabletColumn';
 
 interface SettingsScreenProps {
   onClose: () => void;
@@ -25,6 +26,7 @@ interface SettingsScreenProps {
 
 export function SettingsScreen({ onClose }: SettingsScreenProps) {
   const insets = useSafeAreaInsets();
+  const tabletColumn = useTabletColumn(640);
   const { sound, haptics, setSound, setHaptics } = useSettingsStore();
   const { adsRemoved, priceString, isBusy, purchaseRemoveAds, restore } = usePurchaseStore();
   const [busyAction, setBusyAction] = useState<'purchase' | 'restore' | null>(null);
@@ -65,7 +67,15 @@ export function SettingsScreen({ onClose }: SettingsScreenProps) {
       </View>
 
       <ScrollView
-        contentContainerStyle={[styles.body, { paddingBottom: insets.bottom + spacing.xxl }]}
+        contentContainerStyle={[
+          styles.body,
+          tabletColumn,
+          // Settings is a fixed block -- two toggles, the upgrade card and three
+          // links -- not a list that grows, so it is centred when there is
+          // slack rather than left at the top of a 13" display with half the
+          // screen empty under it.
+          { flexGrow: 1, justifyContent: 'center', paddingBottom: insets.bottom + spacing.xxl },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         <Section title="GAME">
