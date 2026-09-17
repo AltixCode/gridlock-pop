@@ -84,7 +84,22 @@ export function HomeScreen({ onPlay, onOpenSettings, onRemoveAds }: HomeScreenPr
   const { width } = useWindowDimensions();
   // A 1032pt-wide Play button is not a button, it is a stripe. The column keeps
   // the controls at a size a thumb expects while the gradient takes the rest.
-  const column = width >= 700 ? { maxWidth: 560, width: '100%' as const, alignSelf: 'center' as const } : null;
+  const isTablet = width >= 700;
+  // A 1032pt-wide Play button is not a button, it is a stripe. The column keeps
+  // the controls at a size a thumb expects while the gradient takes the rest.
+  const column = isTablet
+    ? { maxWidth: 560, width: '100%' as const, alignSelf: 'center' as const }
+    : null;
+  // `space-between` is right on a phone, where the hero and the panel sit close
+  // enough to read as one composition. On a 1376pt-tall iPad it pulls them to
+  // opposite ends: the logo floats alone around the middle, the controls jam
+  // against the bottom edge, and the two thirds between are dead. Measured
+  // during QA as the worst layout in the fleet -- and worse than merely sparse,
+  // because emptiness in the MIDDLE reads as deliberate rather than as content
+  // that ran out. On a tablet the two groups stay together at the top instead.
+  const distribution = isTablet
+    ? { justifyContent: 'flex-start' as const, gap: spacing.xl }
+    : null;
   const highScore = useGameStore((state) => state.highScore);
   const adsRemoved = usePurchaseStore((state) => state.adsRemoved);
   const priceString = usePurchaseStore((state) => state.priceString);
@@ -97,7 +112,9 @@ export function HomeScreen({ onPlay, onOpenSettings, onRemoveAds }: HomeScreenPr
         pointerEvents="none"
       />
 
-      <View style={[styles.content, column, { paddingTop: insets.top + spacing.lg }]}>
+      <View
+        style={[styles.content, column, distribution, { paddingTop: insets.top + spacing.lg }]}
+      >
         <View style={styles.topBar}>
           <View style={styles.spacer} />
           <IconButton name="settings" label="Settings" onPress={onOpenSettings} />
