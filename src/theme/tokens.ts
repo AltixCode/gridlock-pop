@@ -11,7 +11,14 @@ export const colors = {
   surfaceMuted: '#1E2743',
   boardWell: '#121A30',
   cellEmpty: '#1B2440',
-  cellEmptyEdge: 'rgba(255,255,255,0.04)',
+  // The empty grid is delineated by this edge rather than by its fill, which
+  // sits at 1.13:1 against the well on purpose -- a quiet backdrop for pieces
+  // that carry the energy. That design only works if the edge can be seen, and
+  // at 0.04 it composited to 1.12:1 against the cell: nothing delineated
+  // anything. 0.35 puts it at 3.14:1, the WCAG AA threshold for the boundary
+  // of a non-text component, while staying quiet enough to leave the pieces in
+  // charge.
+  cellEmptyEdge: 'rgba(255,255,255,0.35)',
 
   border: 'rgba(255,255,255,0.08)',
   borderStrong: 'rgba(255,255,255,0.16)',

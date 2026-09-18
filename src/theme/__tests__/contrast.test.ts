@@ -13,6 +13,15 @@
  * backdrop for pieces that sit at 5.6:1 to 10.3:1 against it, and the cells are
  * delineated by `cellEmptyEdge` rather than by fill. Pinning it here would
  * freeze a decision this file never made.
+ *
+ * The reasoning above was sound and its premise was false. `cellEmptyEdge` was
+ * `rgba(255,255,255,0.04)`, which composites to 1.12:1 against the cell it is
+ * supposed to outline -- so nothing delineated anything, and the exemption
+ * rested on a number no one had measured. The live iPad screenshot shows the
+ * result: a board a customer cannot see.
+ *
+ * So the edge is now asserted instead. Keeping the fill exemption and checking
+ * the thing it defers to is the honest version of the same decision.
  */
 import { colors, pieceColors } from '../tokens';
 
@@ -69,5 +78,29 @@ describe('piece colours', () => {
         expect(pieceColors[i]!.base).not.toBe(pieceColors[j]!.base);
       }
     }
+  });
+});
+
+describe('the empty grid is delineated', () => {
+  /**
+   * The fill is allowed to be quiet; the edge is what makes a cell a cell. WCAG
+   * AA asks 3:1 for the boundary of a non-text UI component, and an empty cell
+   * before the first piece lands is the whole board.
+   */
+  function composite(rgba: string, over: string): string {
+    const m = rgba.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
+    if (!m) throw new Error(`not an rgba colour: ${rgba}`);
+    const alpha = Number(m[4]);
+    const fg = [Number(m[1]), Number(m[2]), Number(m[3])];
+    const h = over.replace('#', '');
+    const bg = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
+    const mix = fg.map((v, i) => Math.round(alpha * v + (1 - alpha) * bg[i]!));
+    return `#${mix.map((v) => v.toString(16).padStart(2, '0')).join('')}`;
+  }
+
+  it('draws the empty cell edge at 3:1 against the cell', () => {
+    expect(
+      contrastRatio(composite(colors.cellEmptyEdge, colors.cellEmpty), colors.cellEmpty)
+    ).toBeGreaterThanOrEqual(3);
   });
 });
