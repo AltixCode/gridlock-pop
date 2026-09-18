@@ -87,6 +87,15 @@ const SK_AD_NETWORK_ITEMS = [
 // so they are deliberately absent here.
 const VERSION = '1.0.0';
 
+// The build number CI computes, which is `git rev-list --count HEAD`. This file
+// declared neither `buildNumber` nor `versionCode`, so Expo's defaults applied
+// and every build in App Store Connect is numbered 1 to 5 while the commit
+// count is 59 -- no build can be matched back to the commit that made it.
+//
+// `||`, never `??`: GitHub Actions maps a missing variable to "", and `??`
+// would keep it. An empty CFBundleVersion is an invalid Info.plist.
+const BUILD = process.env.APP_BUILD || '1';
+
 const config: ExpoConfig = {
   name: 'Gridlock Pop',
   slug: 'gridlock-pop',
@@ -104,6 +113,7 @@ const config: ExpoConfig = {
     bundleIdentifier: 'com.altixcode.cubex',
     supportsTablet: true,
     requireFullScreen: false,
+    buildNumber: BUILD,
     config: {
       // No custom crypto beyond standard HTTPS — declaring this up front skips the yearly
       // export-compliance questionnaire on every App Store Connect submission.
@@ -125,6 +135,9 @@ const config: ExpoConfig = {
     // locked to com.altixcode.cubex by its App Store Connect record. They are allowed to
     // differ, and neither is user-visible.
     package: 'com.altixcode.gridlockpop',
+    // Play refuses an upload whose versionCode does not increase, so a default
+    // that never moves means this app could never ship a second release.
+    versionCode: Number.parseInt(BUILD, 10),
     adaptiveIcon: {
       backgroundColor: '#0B1020',
       foregroundImage: './assets/android-icon-foreground.png',
