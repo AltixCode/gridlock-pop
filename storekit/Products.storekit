@@ -1,0 +1,35 @@
+{
+  "identifier": "A67D8D1A-1C8F-4C8D-B404-7A5D1163FBB7",
+  "nonRenewingSubscriptions": [],
+  "products": [
+    {
+      "displayPrice": "4.99",
+      "familyShareable": false,
+      "internalID": "98A0D9FE-4FE5-492E-9904-13BE14FEAB9D",
+      "localizations": [
+        {
+          "description": "gridlock-pop remove ads lifetime unlock",
+          "displayName": "gridlock-pop remove ads",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.altixcode.cubex.removeads",
+      "referenceName": "gridlock-pop remove ads",
+      "type": "NonConsumable"
+    }
+  ],
+  "settings": {
+    "_applicationInternalID": "",
+    "_developerTeamID": "",
+    "_failTransactionsEnabled": false,
+    "_lastSynchronizedDate": 0,
+    "_locale": "en_US",
+    "_storefront": "USA",
+    "_storeKitErrors": []
+  },
+  "subscriptionGroups": [],
+  "version": {
+    "major": 4,
+    "minor": 0
+  }
+}
