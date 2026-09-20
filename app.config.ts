@@ -196,6 +196,7 @@ const config: ExpoConfig = {
           // and warns it may lose visibility/publishing eligibility.
           enableProguardInReleaseBuilds: true,
           enableShrinkResourcesInReleaseBuilds: true,
+          buildArchs: ['arm64-v8a', 'armeabi-v7a'],
         },
       },
     ],
