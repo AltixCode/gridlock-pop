@@ -157,6 +157,11 @@ const config: ExpoConfig = {
     // iOS 26+ SDK refuses to launch apps that have not adopted the UIScene lifecycle, which
     // Expo SDK 57 / RN 0.86 do not yet generate. Drop this once the template does it itself.
     './plugins/withUIScene',
+    // Excludes the unused Amazon Appstore SDK that react-native-purchases pulls in
+    // transitively. R8's handling of that dependency's stack-map-less classes was what
+    // crashed Android release builds with OutOfMemoryError: Metaspace. See the plugin
+    // file for the traced dependency chain and full explanation.
+    './plugins/withExcludeAmazonAppstore',
     [
       'expo-splash-screen',
       {
