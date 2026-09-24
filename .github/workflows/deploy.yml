@@ -554,14 +554,24 @@ jobs:
           # starts more native compilers than the box has memory for. A daemon is
           # worthless in CI anyway -- nothing reuses it -- and its disappearance
           # is reported as a Gradle bug rather than as memory pressure.
+          # MaxMetaspaceSize raised 512m -> 1536m for this app specifically:
+          # R8 synthesizes a stack-map table for every method in the bundled
+          # com.amazon.device:amazon-appstore-sdk:3.0.5 dependency (it predates
+          # stack maps), one class-metadata allocation per near-duplicate
+          # warning, thousands of them -- and that alone was enough to exhaust
+          # a 512m ceiling and crash minifyReleaseWithR8 with
+          # `java.lang.OutOfMemoryError: Metaspace`, discovered 2026-09-24
+          # after this looked like a hang for four cancel-and-retrigger cycles
+          # in a row. The warning spam itself is not the bug -- the fixed
+          # ceiling being too small for it is.
           echo "Building Release APK..."
-          ./gradlew assembleRelease --stacktrace --no-daemon --gradle-user-home "$GRADLE_USER_HOME" --max-workers=2 -Porg.gradle.parallel=false -Dorg.gradle.jvmargs="-Xmx4096m -XX:MaxMetaspaceSize=512m" \
+          ./gradlew assembleRelease --stacktrace --no-daemon --gradle-user-home "$GRADLE_USER_HOME" --max-workers=2 -Porg.gradle.parallel=false -Dorg.gradle.jvmargs="-Xmx4096m -XX:MaxMetaspaceSize=1536m" \
             "-Pandroid.injected.signing.store.file=$KEYSTORE_PATH" \
             "-Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD" \
             "-Pandroid.injected.signing.key.alias=$KEY_ALIAS" \
             "-Pandroid.injected.signing.key.password=$KEY_PASSWORD"
           echo "Building Release AAB Bundle..."
-          ./gradlew bundleRelease --stacktrace --no-daemon --gradle-user-home "$GRADLE_USER_HOME" --max-workers=2 -Porg.gradle.parallel=false -Dorg.gradle.jvmargs="-Xmx4096m -XX:MaxMetaspaceSize=512m" \
+          ./gradlew bundleRelease --stacktrace --no-daemon --gradle-user-home "$GRADLE_USER_HOME" --max-workers=2 -Porg.gradle.parallel=false -Dorg.gradle.jvmargs="-Xmx4096m -XX:MaxMetaspaceSize=1536m" \
             "-Pandroid.injected.signing.store.file=$KEYSTORE_PATH" \
             "-Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD" \
             "-Pandroid.injected.signing.key.alias=$KEY_ALIAS" \
