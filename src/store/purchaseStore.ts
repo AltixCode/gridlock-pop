@@ -26,6 +26,17 @@ function hasEntitlement(info: CustomerInfo | undefined | null): boolean {
   return Boolean(info?.entitlements?.active?.[REMOVE_ADS_ENTITLEMENT]);
 }
 
+const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * A fresh offering fetch immediately after `configurePurchases()` resolves can still come back
+ * with the package's underlying StoreKit product unresolved -- RevenueCat drops a package from
+ * `availablePackages` whenever the store hasn't returned its product yet, which reads
+ * indistinguishably from "this app has no lifetime product" right after a cold launch. These
+ * are retry backoffs, not a timeout: keep trying before settling for "no package."
+ */
+const OFFERING_RETRY_DELAYS_MS = [500, 1000, 2000];
+
 const INITIAL = {
   adsRemoved: false,
   priceString: null as string | null,
@@ -81,23 +92,28 @@ export const usePurchaseStore = create<PurchaseState>((set, get) => ({
   },
 
   loadOffering: async () => {
-    try {
-      const offerings = await Purchases.getOfferings();
-      const current = offerings?.current;
-      const pkg =
-        current?.lifetime ??
-        current?.availablePackages?.find(
-          (item) => item.identifier === REMOVE_ADS_OFFERING_PACKAGE,
-        ) ??
-        current?.availablePackages?.[0] ??
-        null;
-      set({
-        packageToBuy: pkg,
-        priceString: pkg?.product?.priceString ?? capturePriceString(),
-      });
-    } catch {
-      set({ packageToBuy: null, priceString: capturePriceString() });
+    for (const delay of [0, ...OFFERING_RETRY_DELAYS_MS]) {
+      if (delay) await sleep(delay);
+      try {
+        const offerings = await Purchases.getOfferings();
+        const current = offerings?.current;
+        const pkg =
+          current?.lifetime ??
+          current?.availablePackages?.find(
+            (item) => item.identifier === REMOVE_ADS_OFFERING_PACKAGE,
+          ) ??
+          current?.availablePackages?.[0] ??
+          null;
+        if (pkg) {
+          set({ packageToBuy: pkg, priceString: pkg.product?.priceString ?? capturePriceString() });
+          return;
+        }
+      } catch {
+        // Keep retrying on the same schedule -- a transient network error looks
+        // identical to a product StoreKit hasn't warmed up yet.
+      }
     }
+    set({ packageToBuy: null, priceString: capturePriceString() });
   },
 
   purchaseRemoveAds: async () => {

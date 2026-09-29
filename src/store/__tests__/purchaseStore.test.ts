@@ -42,9 +42,34 @@ describe('purchaseStore', () => {
   });
 
   it('survives an offerings fetch failure', async () => {
-    (Purchases.getOfferings as jest.Mock).mockRejectedValueOnce(new Error('offline'));
-    await expect(store().loadOffering()).resolves.toBeUndefined();
+    (Purchases.getOfferings as jest.Mock).mockRejectedValue(new Error('offline'));
+
+    jest.useFakeTimers();
+    const promise = store().loadOffering();
+    await jest.advanceTimersByTimeAsync(500);
+    await jest.advanceTimersByTimeAsync(1000);
+    await jest.advanceTimersByTimeAsync(2000);
+    await expect(promise).resolves.toBeUndefined();
+    jest.useRealTimers();
+
     expect(store().priceString).toBeNull();
+  });
+
+  it('retries when StoreKit has not resolved the product yet, and resolves once it has', async () => {
+    (Purchases.getOfferings as jest.Mock)
+      .mockResolvedValueOnce({ current: { availablePackages: [] } })
+      .mockResolvedValueOnce({ current: { availablePackages: [] } })
+      .mockResolvedValueOnce(offering);
+
+    jest.useFakeTimers();
+    const promise = store().loadOffering();
+    await jest.advanceTimersByTimeAsync(500);
+    await jest.advanceTimersByTimeAsync(1000);
+    await promise;
+    jest.useRealTimers();
+
+    expect(store().priceString).toBe('$3.99');
+    expect(Purchases.getOfferings).toHaveBeenCalledTimes(3);
   });
 
   it('unlocks after a successful purchase', async () => {
