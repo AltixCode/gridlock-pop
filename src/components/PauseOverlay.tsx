@@ -51,6 +51,18 @@ export function PauseOverlay({
           {score.toLocaleString()}
         </Text>
 
+        {/*
+         * Nothing in this game is time-driven -- no falling pieces, no
+         * countdown, no combo that decays while the screen is away. A tester
+         * asked what Pause was even for, reasonably: with nothing to freeze,
+         * it just looks like it does nothing. What it actually does is block
+         * input and hold this run's score, which is worth saying rather than
+         * leaving to be inferred.
+         */}
+        <Text style={[type.caption, styles.explainer]}>
+          Your run is safe — nothing is timed, so resume whenever you like.
+        </Text>
+
         <View style={styles.actions}>
           <Button label="Resume" icon="play" onPress={onResume} />
           <Button label="Restart" icon="restart" variant="secondary" onPress={handleRestart} />
@@ -84,5 +96,6 @@ const styles = StyleSheet.create({
   },
   kicker: { letterSpacing: 2 },
   score: { fontVariant: ['tabular-nums'] },
+  explainer: { textAlign: 'center', paddingHorizontal: spacing.sm },
   actions: { width: '100%', gap: spacing.sm, marginTop: spacing.lg },
 });

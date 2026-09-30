@@ -19,6 +19,15 @@ describe('PauseOverlay', () => {
     expect(view.getByLabelText('Paused')).toBeTruthy();
   });
 
+  it('explains that pausing is a safety gate, not a clock — this game has no timer', async () => {
+    // A tester asked what the pause button was even for, since nothing in the
+    // game is time-driven: no falling pieces, no countdown, no combo decay.
+    // Pausing here only blocks input and protects the run from an accidental
+    // restart tap, which is easy to misread as broken without saying so.
+    const view = await render(<PauseOverlay {...baseProps} />);
+    expect(view.getByText(/your run is safe/i)).toBeTruthy();
+  });
+
   it('resumes play', async () => {
     const view = await render(<PauseOverlay {...baseProps} />);
     await fireEvent.press(view.getByLabelText('Resume'));
